@@ -69,7 +69,8 @@
             btn.disabled = true;
             btn.innerText = "Initializing...";
 
-            fetch(`${API_BASE}/create-order`, {
+            // FIX 2: Corrected API URL
+            fetch(`${API_BASE}/api/payment/create-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -80,12 +81,12 @@
             .then(res => res.json())
             .then(order => {
                 var options = {
-                    "key": "rzp_test_YOUR_KEY", // Keep your real key here
+                    "key": order.key, // FIX 3: Dynamic Razorpay Key
                     "amount": order.amount,
                     "currency": "INR",
                     "name": "KaagazSeva",
                     "description": "Document Service Fee",
-                    "order_id": order.id,
+                    "order_id": order.order_id, // FIX 1: Property name changed to order_id
                     "handler": function (response) {
                         verifyPayment(response, order.amount);
                     },
@@ -108,7 +109,8 @@
         }
 
         function verifyPayment(response, paidAmount) {
-            fetch(`${API_BASE}/verify`, {
+            // FIX 2: Corrected API URL
+            fetch(`${API_BASE}/api/payment/verify`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -126,6 +128,9 @@
                 } else {
                     alert("Verification failed. Contact Support.");
                 }
+            })
+            .catch(err => {
+                alert("Verification Error: " + err.message);
             });
         }
     </script>
