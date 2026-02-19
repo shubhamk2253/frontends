@@ -91,8 +91,8 @@ document.getElementById("applyForm").addEventListener("submit", async function(e
 
         const amount = priceData.price || 500;
 
-        // 3. Redirect to payment page
-        window.location.href = `payment.html?app_id=${appId}&amount=${amount}`;
+        // 3. Redirect to payment page (FIXED: changed payment.html to payments.html)
+        window.location.href = `payments.html?app_id=${appId}&amount=${amount}`;
 
     } catch(err){
         alert(err.message);
