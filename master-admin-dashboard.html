@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KaagazSeva Admin Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(120deg,#eef3fb,#f7f9fc);
+    padding:40px;
+}
+
+/* Header */
+.header{
+    max-width:1200px;
+    margin:auto;
+    margin-bottom:30px;
+}
+
+.header h1{
+    color:#0a4fa3;
+    font-size:30px;
+}
+
+.header p{
+    color:#666;
+}
+
+/* Counter grid */
+.grid{
+    max-width:1200px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 20px 45px rgba(0,0,0,0.08);
+    text-align:center;
+    transition:0.25s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.card h3{
+    color:#666;
+    margin-bottom:12px;
+}
+
+.value{
+    font-size:36px;
+    font-weight:bold;
+    color:#0a4fa3;
+}
+
+/* Panels */
+.panels{
+    max-width:1200px;
+    margin:40px auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.panel{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 20px 45px rgba(0,0,0,0.08);
+}
+
+.panel h3{
+    margin-bottom:15px;
+    color:#0a4fa3;
+}
+
+.panel a{
+    display:inline-block;
+    padding:13px 22px;
+    border-radius:12px;
+    background:linear-gradient(90deg,#0a4fa3,#0f6ad6);
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.25s;
+}
+
+.panel a:hover{
+    box-shadow:0 10px 25px rgba(10,79,163,0.25);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>KaagazSeva Master Admin Dashboard</h1>
+<p>Real-time nationwide operations overview</p>
+</div>
+
+<!-- Counters -->
+<div class="grid">
+<div class="card">
+<h3>Total Applications</h3>
+<div class="value" id="apps">0</div>
+</div>
+
+<div class="card">
+<h3>Active Agents</h3>
+<div class="value" id="agents">0</div>
+</div>
+
+<div class="card">
+<h3>Total Revenue</h3>
+<div class="value">₹<span id="revenue">0</span></div>
+</div>
+
+<div class="card">
+<h3>Pending Applications</h3>
+<div class="value" id="pending">0</div>
+</div>
+</div>
+
+<!-- Panels -->
+<div class="panels">
+
+<div class="panel">
+<h3>Applications Panel</h3>
+<a href="./master-dashboard.html">Open Panel</a>
+</div>
+
+<div class="panel">
+<h3>Agents Management</h3>
+<a href="./admin-agents.html">Open Panel</a>
+</div>
+
+<div class="panel">
+<h3>Payments Panel</h3>
+<a href="./payments.html">Open Panel</a>
+</div>
+
+</div>
+
+<script src="config.js"></script>
+<script>
+    const API_BASE = "http://localhost:5000";   // change after deployment
+
+function authFetch(url, options = {}) {
+    const token = localStorage.getItem("token");
+
+    options.headers = {
+        ...(options.headers || {}),
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+    };
+
+    return fetch(API_BASE + url, options)
+        .then(res => res.json());
+}
+
+    
+function loadStats(){
+fetch("http://127.0.0.1:5000/api/admin/stats")
+.then(res=>res.json())
+.then(d=>{
+    document.getElementById("apps").innerText=d.data.total_apps;
+    document.getElementById("agents").innerText=d.data.active_agents;
+    document.getElementById("revenue").innerText=d.data.revenue;
+    document.getElementById("pending").innerText=d.data.pending_apps;
+});
+}
+loadStats();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Service - KaagazSeva</title>
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body{ background:linear-gradient(120deg,#eef3fb,#f7f9fc); min-height:100vh; display:flex; justify-content:center; align-items:center; }
+        .container{ background:#ffffff; padding:45px; border-radius:18px; width:460px; box-shadow:0 12px 35px rgba(0,0,0,0.08); animation:fadeIn 0.4s ease; }
+        @keyframes fadeIn{ from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        h2{ text-align:center; margin-bottom:25px; color:#0a4fa3; font-size:26px; }
+        input, select{ width:100%; padding:14px; margin:12px 0; border-radius:10px; border:1px solid #d6dbe6; font-size:15px; transition:0.25s; }
+        input:focus, select:focus{ border-color:#0a4fa3; outline:none; box-shadow:0 0 0 3px rgba(10,79,163,0.08); }
+        button{ width:100%; padding:15px; margin-top:15px; background:linear-gradient(90deg,#0a4fa3,#0f6ad6); color:white; border:none; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer; transition:0.25s; }
+        button:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(10,79,163,0.25); }
+        .file-label { font-size: 13px; color: #666; margin-left: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Apply for Document Service</h2>
+    
+    <form id="applyForm" enctype="multipart/form-data">
+        <input type="text" name="name" id="name" placeholder="Full Name" required>
+        <input type="text" name="mobile" id="mobile" placeholder="Mobile Number" required>
+        <input type="text" name="pincode" id="pincode" placeholder="Enter Pincode" required>
+
+        <select name="service" id="service" required>
+            <option value="">Select Service</option>
+            <optgroup label="Income Tax Act Services">
+                <option value="PAN Card New">PAN Card New</option>
+                <option value="PAN Card Correction">PAN Card Correction</option>
+                <option value="PAN Aadhaar Linking">PAN Aadhaar Linking</option>
+            </optgroup>
+            <optgroup label="Passport Act Services">
+                <option value="New Passport Application">New Passport Application</option>
+                <option value="Passport Renewal">Passport Renewal</option>
+            </optgroup>
+            <optgroup label="State Revenue Department">
+                <option value="Income Certificate">Income Certificate</option>
+                <option value="Caste Certificate">Caste Certificate</option>
+                <option value="Domicile Certificate">Domicile Certificate</option>
+            </optgroup>
+            <optgroup label="Transport Department (RTO)">
+                <option value="Driving License New">Driving License New</option>
+                <option value="Vehicle RC Transfer">Vehicle RC Transfer</option>
+            </optgroup>
+        </select>
+
+        <label class="file-label">Upload Required ID Document:</label>
+        <input type="file" name="document" id="document" required>
+
+        <button type="submit" id="submitBtn">Submit Request & Pay</button>
+    </form>
+</div>
+
+<script src="config.js"></script>
+<script>
+
+document.getElementById("applyForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    const formData = new FormData(this);
+
+    try {
+        // 1. Submit application using global API_BASE from config.js
+        const res = await fetch(`${API_BASE}/api/apply-service`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if(!data.success){
+            throw new Error(data.message || "Application failed");
+        }
+
+        const appId = data.application_id;
+
+        // 2. Fetch service price dynamically
+        const serviceName = document.getElementById("service").value;
+
+        const priceRes = await fetch(`${API_BASE}/api/service-price?service=${encodeURIComponent(serviceName)}`);
+        const priceData = await priceRes.json();
+
+        const amount = priceData.price || 500;
+
+        // 3. Redirect to payment page
+        window.location.href = `payment.html?app_id=${appId}&amount=${amount}`;
+
+    } catch(err){
+        alert(err.message);
+        btn.disabled = false;
+        btn.innerText = "Submit Request & Pay";
+    }
+});
+</script>
+
+</body>
+</html>

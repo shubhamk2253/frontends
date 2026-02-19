@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Application - KaagazSeva</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background:linear-gradient(120deg,#eef3fb,#f7f9fc);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    background:white;
+    padding:45px;
+    border-radius:18px;
+    width:420px;
+    box-shadow:0 12px 35px rgba(0,0,0,0.08);
+    text-align:center;
+}
+
+h2{
+    margin-bottom:25px;
+    color:#0a4fa3;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin:12px 0;
+    border-radius:10px;
+    border:1px solid #d6dbe6;
+    font-size:15px;
+}
+
+input:focus{
+    border-color:#0a4fa3;
+    outline:none;
+    box-shadow:0 0 0 3px rgba(10,79,163,0.08);
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    background:linear-gradient(90deg,#0a4fa3,#0f6ad6);
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    background:#f1f5fb;
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Track Your Application</h2>
+
+<input type="text" id="appId" placeholder="Enter Application ID">
+<input type="text" id="mobile" placeholder="Enter Mobile Number">
+
+<button onclick="trackApplication()">Check Status</button>
+
+<div class="result" id="resultBox">
+    <h3>Status:</h3>
+    <p id="statusText"></p>
+</div>
+
+</div>
+
+<script src="config.js"></script>
+<script>
+function trackApplication(){
+
+    const appId = document.getElementById('appId').value;
+    const mobile = document.getElementById('mobile').value;
+
+    if(!appId || !mobile){
+        alert("Enter Application ID and Mobile Number");
+        return;
+    }
+
+    // Updated to use API_BASE from config.js
+    fetch(`${API_BASE}/api/track`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({application_id:appId, mobile:mobile})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.success){
+            document.getElementById('resultBox').style.display='block';
+            document.getElementById('statusText').innerText =
+                "Service: " + data.service + " | Status: " + data.status;
+        }else{
+            alert("Application not found");
+        }
+    });
+
+}
+</script>
+
+</body>
+</html>

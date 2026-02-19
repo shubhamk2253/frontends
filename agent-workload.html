@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agent Comprehensive Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fb;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        h2 { color: #0a4fa3; margin-bottom: 20px; }
+        h3 { color: #333; margin-top: 30px; border-left: 5px solid #0a4fa3; padding-left: 10px; }
+
+        /* Earnings Summary Box */
+        .earnings-card {
+            background: linear-gradient(135deg, #0a4fa3 0%, #007bff 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: inline-block;
+            min-width: 250px;
+        }
+
+        .earnings-card small { opacity: 0.8; font-size: 14px; }
+        .earnings-card div { font-size: 28px; font-weight: bold; margin-top: 5px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        th {
+            background: #0a4fa3;
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover { background: #f5f8ff; }
+        
+        .section-separator {
+            height: 2px;
+            background: #eee;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Agent Dashboard</h2>
+
+    <div class="earnings-card">
+        <small>Total Commission Earned</small>
+        <div id="totalEarnings">₹0</div>
+    </div>
+
+    <h3>Workload Monitoring</h3>
+    <table id="workloadTable">
+        <thead>
+            <tr>
+                <th>Agent</th>
+                <th>District</th>
+                <th>Pincode</th>
+                <th>Applications Assigned</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="section-separator"></div>
+
+    <h3>Earnings History</h3>
+    <table id="earningsTable">
+        <thead>
+            <tr>
+                <th>Application ID</th>
+                <th>Amount Earned</th>
+                <th>Service Type</th>
+                <th>Date Created</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+<script src="config.js"></script>
+<script>
+    const token = localStorage.getItem("token");
+
+/* ---------- WORKLOAD (CURRENT AGENT) ---------- */
+fetch(`${API_BASE}/api/agent/workload`, {
+    headers: { "Authorization": "Bearer " + token }
+})
+.then(res => res.json())
+.then(data => {
+    const tbody = document.querySelector("#workloadTable tbody");
+
+    tbody.innerHTML = `
+        <tr>
+            <td>Current Agent</td>
+            <td>-</td>
+            <td>-</td>
+            <td><strong>${data.pending_tasks}</strong></td>
+        </tr>
+    `;
+})
+.catch(err => console.error("Workload Error:", err));
+
+
+/* ---------- EARNINGS SUMMARY ---------- */
+fetch(`${API_BASE}/api/agent/earnings/summary`, {
+    headers: { "Authorization": "Bearer " + token }
+})
+.then(res => res.json())
+.then(data => {
+    document.getElementById("totalEarnings").innerText =
+        "₹" + (data.total_earnings || 0);
+})
+.catch(err => console.error("Summary Error:", err));
+
+
+/* ---------- EARNINGS HISTORY ---------- */
+fetch(`${API_BASE}/api/agent/earnings/history`, {
+    headers: { "Authorization": "Bearer " + token }
+})
+.then(res => res.json())
+.then(rows => {
+    const table = document.querySelector("#earningsTable tbody");
+
+    rows.forEach(r => {
+        table.innerHTML += `
+        <tr>
+            <td>${r.application_id}</td>
+            <td style="color:green;font-weight:bold;">₹${r.earned}</td>
+            <td>${r.service}</td>
+            <td>${new Date(r.created_at).toLocaleDateString()}</td>
+        </tr>`;
+    });
+})
+.catch(err => console.error("History Error:", err));
+</script>
+
+
+</body>
+</html>

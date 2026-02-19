@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KaagazSeva — Secure Payment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .payment-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .logo { color: #0a4fa3; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+        .amount-display { font-size: 48px; font-weight: bold; color: #333; margin: 20px 0; }
+        .details { color: #666; margin-bottom: 30px; font-size: 14px; }
+
+        .btn-pay {
+            background: #0a4fa3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-pay:hover { background: #083d7e; }
+        .btn-pay:disabled { background: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+
+<body>
+
+    <div class="payment-card">
+        <div class="logo">KaagazSeva</div>
+        <p>Service Application Payment</p>
+        <div class="amount-display" id="displayAmount">₹0</div>
+        <p class="details">Secure Payment Gateway via Razorpay</p>
+        <button class="btn-pay" id="payButton" onclick="startPayment()">Pay Securely Now</button>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="config.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const application_id = params.get('app_id');
+        const amount = params.get('amount');
+
+        document.getElementById('displayAmount').innerText = "₹" + amount;
+
+        function startPayment() {
+            const btn = document.getElementById('payButton');
+            btn.disabled = true;
+            btn.innerText = "Initializing...";
+
+            fetch(`${API_BASE}/create-order`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    application_id: application_id,
+                    amount: amount
+                })
+            })
+            .then(res => res.json())
+            .then(order => {
+                var options = {
+                    "key": "rzp_test_YOUR_KEY", // Keep your real key here
+                    "amount": order.amount,
+                    "currency": "INR",
+                    "name": "KaagazSeva",
+                    "description": "Document Service Fee",
+                    "order_id": order.id,
+                    "handler": function (response) {
+                        verifyPayment(response, order.amount);
+                    },
+                    "modal": {
+                        "ondismiss": function() {
+                            btn.disabled = false;
+                            btn.innerText = "Pay Securely Now";
+                        }
+                    },
+                    "theme": { "color": "#0a4fa3" }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            })
+            .catch(err => {
+                alert("Error: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "Pay Securely Now";
+            });
+        }
+
+        function verifyPayment(response, paidAmount) {
+            fetch(`${API_BASE}/verify`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    application_id: application_id,
+                    order_id: response.razorpay_order_id,
+                    payment_id: response.razorpay_payment_id,
+                    signature: response.razorpay_signature,
+                    amount: paidAmount / 100 
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "confirmation.html?app_id=" + application_id;
+                } else {
+                    alert("Verification failed. Contact Support.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
