@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaagazSeva — System Core Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --core-bg: #0a0c10;
+            --neon: #00ffcc;
+            --danger: #ff3e3e;
+            --text-dim: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--core-bg);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #111827 0%, #0a0c10 100%);
+        }
+
+        /* --- Background Grid Effect --- */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: linear-gradient(#1e293b 1px, transparent 1px), linear-gradient(90deg, #1e293b 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .login-card {
+            width: 400px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header { text-align: center; margin-bottom: 35px; }
+        
+        /* --- Scanning Icon --- */
+        .scan-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border: 2px solid var(--neon);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--neon);
+            top: 0;
+            box-shadow: 0 0 15px var(--neon);
+            animation: scan 2s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+
+        .header h1 { font-size: 22px; font-weight: 800; letter-spacing: 1px; color: var(--neon); }
+        .header p { font-size: 12px; color: var(--text-dim); margin-top: 5px; font-family: 'JetBrains Mono', monospace; }
+
+        /* --- Input Styles --- */
+        .input-group { margin-bottom: 20px; }
+        .input-group label { 
+            display: block; font-size: 11px; font-weight: 700; 
+            color: var(--text-dim); margin-bottom: 8px; text-transform: uppercase; 
+        }
+        .input-group input {
+            width: 100%;
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid #1e293b;
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            transition: 0.3s;
+            outline: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .input-group input:focus {
+            border-color: var(--neon);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--neon);
+            color: #0a0c10;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+        }
+
+        .status-msg {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 18px;
+        }
+        .error { color: var(--danger); }
+        .success { color: var(--neon); }
+
+        .footer-note {
+            margin-top: 30px;
+            font-size: 10px;
+            text-align: center;
+            color: #334155;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div class="login-card">
+    <div class="header">
+        <div class="scan-container">
+            <div class="scan-line"></div>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="var(--neon)">
+                <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,12.5C13.38,12.5 14.5,13.62 14.5,15C14.5,16.38 13.38,17.5 12,17.5C10.62,17.5 9.5,16.38 9.5,15C9.5,13.62 10.62,12.5 12,12.5M12,11C10.34,11 9,9.66 9,8C9,6.34 10.34,5 12,5C13.66,5 15,6.34 15,8C15,9.66 13.66,11 12,11Z"/>
+            </svg>
+        </div>
+        <h1>SYSTEM CORE</h1>
+        <p>ROOT PRIVILEGE HANDSHAKE</p>
+    </div>
+
+    <form id="founderLoginForm">
+        <div class="input-group">
+            <label>Master Identity (Email)</label>
+            <input type="email" id="email" value="khots3636@gmail.com" required readonly>
+        </div>
+        <div class="input-group">
+            <label>Access Credential (Password)</label>
+            <input type="password" id="password" placeholder="••••••••••••" required>
+        </div>
+        <button type="submit" class="login-btn">Initiate Auth</button>
+    </form>
+
+    <div id="status" class="status-msg"></div>
+
+    <div class="footer-note">
+        ENCRYPTION: AES-256-GCM | IP: LOGGED
+    </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+    const loginForm = document.getElementById('founderLoginForm');
+    const statusDiv = document.getElementById('status');
+
+    loginForm.onsubmit = async (e) => {
+        e.preventDefault();
+        statusDiv.className = "status-msg";
+        statusDiv.innerText = "> INITIALIZING CRYPTO_LAYER...";
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch(`${API_BASE}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, role: 'founder' })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                statusDiv.className = "status-msg success";
+                statusDiv.innerText = "> ACCESS GRANTED. REDIRECTING...";
+                
+                // Store Founder-specific data
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("role", "founder");
+                localStorage.setItem("name", data.name || "Shubham Khot");
+
+                setTimeout(() => {
+                    window.location.href = "admin-management.html";
+                }, 1500);
+            } else {
+                statusDiv.className = "status-msg error";
+                statusDiv.innerText = `> ERROR: ${data.error || "HANDSHAKE_FAILED"}`;
+            }
+        } catch (error) {
+            statusDiv.className = "status-msg error";
+            statusDiv.innerText = "> SYSTEM_OFFLINE: CHECK API_BASE";
+        }
+    };
+</script>
+
+</body>
+</html>
