@@ -3,352 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaagazSeva – India’s Premier Document Service Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>KaagazSeva | Live Service Gateway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #0a4fa3;
-            --primary-dark: #083d7e;
-            --accent: #ffcc00;
-            --text-main: #1a202c;
-            --text-light: #4a5568;
-            --bg-light: #f7fafc;
-            --white: #ffffff;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --founder-neon: #00ffcc;
+            --brand: #0052CC;
+            --brand-gradient: linear-gradient(135deg, #0052CC 0%, #003399 100%);
+            --accent: #FFAB00;
+            --glass: rgba(255, 255, 255, 0.9);
+            --card-border: #e2e8f0;
+            --text-dark: #091E42;
+            --text-muted: #44546F;
+            --founder-neon: #00E5FF;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg-light); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus+Jakarta+Sans', sans-serif; }
+        body { background: #f8fafc; color: var(--text-dark); }
 
-        /* --- Header & Navigation --- */
+        /* --- Dynamic Header --- */
         header {
-            background: var(--white);
-            padding: 0 40px;
-            height: 80px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            height: 70px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
+            padding: 0 5%;
+            position: fixed;
+            top: 0; width: 100%;
             z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--card-border);
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--brand);
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
-            text-decoration: none;
         }
-
-        .nav-right { display: flex; align-items: center; gap: 20px; }
-
-        .nav-links { display: flex; gap: 25px; margin-right: 15px; }
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-        .nav-links a:hover { color: var(--primary); }
-
-        /* --- Founder Secure Button --- */
-        .founder-access-btn {
-            background: #1a202c;
-            color: var(--founder-neon);
-            border: 1px solid var(--founder-neon);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            display: none; /* Hidden unless triggered */
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
-        }
-        .founder-access-btn:hover {
-            background: var(--founder-neon);
-            color: #1a202c;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
-        }
-        .pulse {
-            width: 6px;
-            height: 6px;
-            background: var(--founder-neon);
-            border-radius: 50%;
-            animation: pulse-gfx 1.5s infinite;
-        }
-        @keyframes pulse-gfx {
-            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(0, 255, 204, 0); }
-            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
-        }
-
-        .menu-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-        .menu-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
-
-        /* --- Side Drawer --- */
-        .drawer-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(4px);
-            visibility: hidden; opacity: 0;
-            transition: 0.3s; z-index: 2000;
-        }
-        .drawer {
-            position: fixed;
-            top: 0; right: -350px; width: 350px; height: 100%;
-            background: var(--white);
-            z-index: 2001;
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-        }
-        .drawer.active { right: 0; }
-        .drawer-overlay.active { visibility: visible; opacity: 1; }
-
-        .drawer-section { margin-bottom: 30px; }
-        .drawer-section label {
-            display: block; font-size: 11px; text-transform: uppercase;
-            letter-spacing: 1.5px; color: #a0aec0; font-weight: 700; margin-bottom: 15px;
-        }
-        .drawer-link {
-            display: block; padding: 12px 0; color: var(--text-main);
-            text-decoration: none; font-weight: 600; border-bottom: 1px solid #edf2f7;
-            transition: 0.2s;
-        }
-        .drawer-link:hover { color: var(--primary); padding-left: 8px; }
 
         /* --- Hero Section --- */
         .hero {
-            background: linear-gradient(135deg, #0a4fa3 0%, #0f6ad6 100%);
-            color: var(--white);
-            padding: 140px 20px;
+            padding: 150px 5% 80px;
             text-align: center;
-            clip-path: ellipse(150% 100% at 50% 0%);
+            background: radial-gradient(circle at top right, #eef2ff, transparent);
         }
-        .hero h1 { font-size: 56px; font-weight: 800; margin-bottom: 20px; letter-spacing: -1.5px; }
-        .hero p { font-size: 20px; opacity: 0.9; max-width: 700px; margin: 0 auto 40px; }
-        
-        .cta-btn {
-            background: var(--accent);
-            color: var(--primary-dark);
-            padding: 20px 45px;
+
+        .hero h1 { font-size: 52px; font-weight: 800; margin-bottom: 20px; color: var(--text-dark); }
+        .hero h1 span { color: var(--brand); }
+
+        /* --- Live Search Bar --- */
+        .search-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 10px;
+            border-radius: 20px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border: 1px solid var(--card-border);
+        }
+
+        select {
+            flex: 1;
+            padding: 15px;
             border: none;
-            border-radius: 14px;
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2344546F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 15px center;
+            appearance: none;
+        }
+
+        .fetch-btn {
+            background: var(--brand);
+            color: white;
+            padding: 0 35px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 8px 25px rgba(255, 204, 0, 0.3);
         }
-        .cta-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(255, 204, 0, 0.4); }
 
-        /* --- Features/Services --- */
-        .section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section h2 { font-size: 36px; font-weight: 800; margin-bottom: 60px; color: var(--primary-dark); }
-        
-        .cards {
+        .fetch-btn:hover { background: #003399; transform: scale(1.02); }
+
+        /* --- Services Grid --- */
+        .grid-container {
+            padding: 40px 5%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
         }
-        .card {
-            background: var(--white);
-            padding: 45px 35px;
-            border-radius: 24px;
-            text-align: left;
-            transition: 0.4s;
-            border: 1px solid #f1f5f9;
-        }
-        .card:hover { transform: translateY(-12px); box-shadow: var(--shadow); }
-        .card .icon-box { 
-            width: 50px; height: 50px; background: #eef4ff; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; color: var(--primary);
-            margin-bottom: 25px;
-        }
-        .card h3 { color: var(--primary-dark); margin-bottom: 15px; font-size: 22px; font-weight: 700; }
-        .card p { color: var(--text-light); font-size: 15px; line-height: 1.7; }
 
-        footer {
-            background: #111827;
-            color: #94a3b8;
-            padding: 60px 40px;
-            text-align: center;
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            transition: 0.3s ease;
+            position: relative;
+        }
+
+        .service-card:hover {
+            border-color: var(--brand);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+        }
+
+        .price-tag {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-weight: 800;
             font-size: 14px;
         }
 
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero h1 { font-size: 38px; }
-            header { padding: 0 20px; }
-            .drawer { width: 100%; right: -100%; }
+        /* --- Drawer --- */
+        .drawer {
+            position: fixed; top: 0; right: -400px; width: 400px; height: 100%;
+            background: white; z-index: 2001; transition: 0.4s; padding: 40px;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
         }
+        .drawer.active { right: 0; }
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); visibility: hidden; opacity: 0; transition: 0.3s; z-index: 2000;
+        }
+        .overlay.active { visibility: visible; opacity: 1; }
     </style>
 </head>
-
 <body>
 
 <header>
-    <a href="index.html" class="logo">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--primary)">
-            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-        </svg>
+    <a href="/" class="logo">
+        <div style="width: 35px; height: 35px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M13 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9l-7-7zM6 20V4h7v5h5v11H6z"/></svg>
+        </div>
         KaagazSeva
     </a>
-
-    <div class="nav-right">
-        <button id="founderBtn" class="founder-access-btn" onclick="location.href='founder-login.html'">
-            <div class="pulse"></div>
-            System Core
-        </button>
-
-        <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="apply-service.html">Services</a>
-            <a href="track.html">Track Status</a>
-        </nav>
-
-        <button class="menu-btn" onclick="toggleDrawer()">
-            <span>Explore</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
+    <div style="display:flex; gap: 20px; align-items: center;">
+        <button id="founderBtn" style="display:none;" class="fetch-btn" onclick="location.href='/founder'">System Core</button>
+        <svg onclick="toggleDrawer()" style="cursor:pointer" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
     </div>
 </header>
 
-<div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <div class="drawer-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-        <h2 style="color: var(--primary); font-weight:800;">Navigation</h2>
-        <button onclick="toggleDrawer()" style="background:none; border:none; font-size:32px; cursor:pointer; color:#94a3b8">&times;</button>
+    <h2 style="margin-bottom: 30px;">Menu</h2>
+    <div id="userProfile" style="padding: 20px; background: #f1f5f9; border-radius: 15px; margin-bottom: 20px; display: none;">
+        <p id="userName" style="font-weight: 800; color: var(--brand);"></p>
+        <p id="userRole" style="font-size: 12px; text-transform: uppercase;"></p>
     </div>
-
-    <div class="drawer-section">
-        <label>Portal Access</label>
-        <div id="auth-links">
-            <a href="customer-login.html" class="drawer-link">Customer Login</a>
-            <a href="agent-login.html" class="drawer-link">Agent Login</a>
-            <a href="admin-login.html" class="drawer-link">Staff Portal</a>
-        </div>
-    </div>
-
-    <div class="drawer-section">
-        <label>Join the Network</label>
-        <a href="customer-register.html" class="drawer-link">Create Account</a>
-        <a href="agent-register.html" class="drawer-link">Apply as Agent</a>
-    </div>
-
-    <div class="drawer-section" style="margin-top:auto;">
-        <label>Help & Legal</label>
-        <a href="#" class="drawer-link">Support Desk</a>
-        <a href="#" class="drawer-link">Privacy Policy</a>
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        <a href="/login" style="text-decoration:none; color: var(--text-dark); font-weight: 600;">Login to Portal</a>
+        <a href="/register" style="text-decoration:none; color: var(--text-dark); font-weight: 600;">Register as Agent</a>
     </div>
 </div>
 
 <section class="hero">
-    <h1>India’s Digital Document Gateway</h1>
-    <p>We bridge the gap between citizens and government services through a verified network of expert agents.</p>
-    <button class="cta-btn" onclick="location.href='apply-service.html'">Start Application Now</button>
-</section>
-
-
-
-<section class="section">
-    <h2>Premier Solutions</h2>
-    <div class="cards">
-        <div class="card">
-            <div class="icon-box">💳</div>
-            <h3>PAN Identity</h3>
-            <p>New registration, duplicate issuance, and data correction with automated tracking.</p>
-        </div>
-        <div class="card">
-            <div class="icon-box">📜</div>
-            <h3>State Revenue</h3>
-            <p>Digital processing for Income, Caste, and Domicile certificates across all states.</p>
-        </div>
-        <div class="card">
-            <div class="icon-box">🛂</div>
-            <h3>Passport Seva</h3>
-            <p>Full appointment management and documentation for fresh and renewal passports.</p>
-        </div>
-        <div class="card">
-            <div class="icon-box">⚖️</div>
-            <h3>Legal & Tax</h3>
-            <p>GST, ITR Filing, and Udyam registrations for small businesses and individuals.</p>
-        </div>
+    <h1>Your State, Your <span>Documents.</span></h1>
+    <p style="color: var(--text-muted); margin-bottom: 40px;">Direct access to state-verified certificates and applications.</p>
+    
+    <div class="search-container">
+        <select id="stateSelect">
+            <option value="">Loading States...</option>
+        </select>
+        <button class="fetch-btn" onclick="loadServices()">View Services</button>
     </div>
 </section>
 
-<footer>
-    <div style="margin-bottom: 20px;">
-        <strong style="color:white; font-size:18px;">KaagazSeva India</strong>
+<div id="serviceGrid" class="grid-container">
     </div>
-    <p>© 2026 KaagazSeva. All rights reserved. 
-    <br>Empowering the nation through transparent documentation.</p>
-</footer>
 
 <script src="config.js"></script>
 <script>
+    // 1. Fetch States directly from Database on Load
+    async function loadStates() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/states`);
+            const states = await response.json();
+            const select = document.getElementById('stateSelect');
+            select.innerHTML = '<option value="">Select your State</option>';
+            states.forEach(state => {
+                select.innerHTML += `<option value="${state.id}">${state.state_name}</option>`;
+            });
+        } catch (err) {
+            console.error("Failed to load states", err);
+        }
+    }
+
+    // 2. Fetch Services based on selected state_id
+    async function loadServices() {
+        const stateId = document.getElementById('stateSelect').value;
+        if(!stateId) return alert("Please select a state first");
+
+        const grid = document.getElementById('serviceGrid');
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Fetching live data...</p>';
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/services?state_id=${stateId}`);
+            const services = await response.json();
+            
+            grid.innerHTML = '';
+            services.forEach(s => {
+                grid.innerHTML += `
+                    <div class="service-card">
+                        <div class="price-tag">₹${s.price}</div>
+                        <h3 style="margin-bottom: 10px;">${s.service_name}</h3>
+                        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">${s.description}</p>
+                        <button class="fetch-btn" style="width:100%; padding: 12px;" onclick="apply('${s.id}')">Apply Now</button>
+                    </div>
+                `;
+            });
+        } catch (err) {
+            grid.innerHTML = '<p>Error loading services.</p>';
+        }
+    }
+
     function toggleDrawer() {
         document.getElementById('drawer').classList.toggle('active');
         document.getElementById('overlay').classList.toggle('active');
     }
 
+    // 3. User Session Check (No local storage)
+    async function checkSession() {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`);
+        if(res.ok) {
+            const user = await res.json();
+            document.getElementById('userProfile').style.display = 'block';
+            document.getElementById('userName').innerText = user.full_name;
+            document.getElementById('userRole').innerText = user.role;
+            if(user.role === 'founder') document.getElementById('founderBtn').style.display = 'block';
+        }
+    }
+
     window.onload = () => {
-        const token = localStorage.getItem("token");
-        const role = localStorage.getItem("role");
-        const urlParams = new URLSearchParams(window.location.search);
-        const founderBtn = document.getElementById('founderBtn');
-
-        // Logic for "System Core" Button Visibility
-        if(role === 'founder' || urlParams.has('root')) {
-            founderBtn.style.display = 'flex';
-        }
-
-        // Update Drawer Content if Logged In
-        if(token) {
-            document.getElementById('auth-links').innerHTML = `
-                <div style="padding:15px; background:#f1f5f9; border-radius:12px; margin-bottom:15px;">
-                    <p style="font-size:10px; font-weight:800; color:var(--primary);">AUTHORIZED SESSION</p>
-                    <p style="font-weight:700; color:var(--text-main);">${role ? role.toUpperCase() : 'USER'}</p>
-                </div>
-                <a href="dashboard.html" class="drawer-link">Access Dashboard</a>
-                <a href="#" class="drawer-link" onclick="logout()" style="color: #ef4444">Secure Logout</a>
-            `;
-        }
-    }
-
-    function logout() {
-        if(confirm("Confirm secure logout?")) {
-            localStorage.clear();
-            window.location.href = "index.html";
-        }
-    }
+        loadStates();
+        checkSession();
+    };
 </script>
 
 </body>
