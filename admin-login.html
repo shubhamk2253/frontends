@@ -3,232 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Access | KaagazSeva Central Command</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>Command Center | KaagazSeva Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --founder-gold: #fbbf24;
-            --state-emerald: #10b981;
-            --district-sky: #38bdf8;
-            --terminal-dark: #020617;
-            --glass: rgba(15, 23, 42, 0.8);
-            --border: rgba(255, 255, 255, 0.1);
+            --bg-deep: #020617;
+            --panel-bg: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent-district: #38bdf8;
+            --accent-state: #10b981;
+            --accent-founder: #fbbf24;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-deep); color: var(--text-main); display: flex; min-height: 100vh; overflow: hidden; }
+
+        /* --- Dynamic Sidebar --- */
+        aside {
+            width: 280px;
+            background: rgba(2, 6, 23, 0.8);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            backdrop-filter: blur(20px);
+            z-index: 100;
+        }
+
+        .brand { font-weight: 800; font-size: 20px; color: var(--text-main); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .role-badge { 
+            padding: 4px 10px; border-radius: 6px; font-size: 10px; 
+            text-transform: uppercase; font-weight: 800; letter-spacing: 1px;
+            margin-top: 5px; display: inline-block;
+        }
+
+        .nav-group { margin-bottom: 30px; }
+        .nav-label { font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 15px; padding-left: 10px; }
         
-        body { 
-            background-color: var(--terminal-dark); 
-            height: 100vh; display: flex; align-items: center; justify-content: center;
-            overflow: hidden; color: white;
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px 15px;
+            color: var(--text-dim); text-decoration: none; border-radius: 12px;
+            font-size: 14px; font-weight: 500; transition: 0.3s; margin-bottom: 5px;
         }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+        .nav-item.active { background: var(--panel-bg); border: 1px solid var(--border); color: var(--text-main); }
 
-        /* High-End Background: Neural Grid Effect */
-        #canvas-bg { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.3; }
-
-        .login-card {
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            width: 100%; max-width: 480px;
-            padding: 50px;
-            border-radius: 30px;
-            border: 1px solid var(--border);
-            box-shadow: 0 0 80px rgba(0,0,0,0.5);
-            z-index: 10;
-            text-align: center;
-            position: relative;
-        }
-
-        /* Role Selector - The "No Developer" Design Touch */
-        .role-selector {
-            display: flex; background: rgba(0,0,0,0.4);
-            padding: 6px; border-radius: 16px; margin-bottom: 35px;
-            border: 1px solid var(--border);
-        }
-
-        .role-option {
-            flex: 1; padding: 12px; font-size: 12px; font-weight: 700;
-            cursor: pointer; border-radius: 12px; transition: 0.4s;
-            text-transform: uppercase; letter-spacing: 1px; color: #64748b;
-        }
-
-        .role-option.active[data-role="district"] { background: var(--district-sky); color: var(--terminal-dark); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
-        .role-option.active[data-role="state"] { background: var(--state-emerald); color: var(--terminal-dark); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-        .role-option.active[data-role="founder"] { background: var(--founder-gold); color: var(--terminal-dark); box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
-
-        .admin-icon {
-            width: 70px; height: 70px; margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 20px; border: 1px solid var(--border);
-            transition: 0.5s;
-        }
-
-        h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 5px; }
-        .status-line { font-family: 'JetBrains Mono'; font-size: 11px; color: #94a3b8; margin-bottom: 30px; }
-
-        .input-box { position: relative; margin-bottom: 20px; text-align: left; }
-        label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        /* --- Main Content Area --- */
+        main { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
         
-        input {
-            width: 100%; padding: 16px; background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border); border-radius: 14px;
-            color: white; font-size: 15px; transition: 0.3s;
-        }
-        input:focus { border-color: var(--district-sky); outline: none; background: rgba(0,0,0,0.5); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .user-profile { display: flex; align-items: center; gap: 15px; }
+        .user-info { text-align: right; }
+        .avatar { width: 45px; height: 45px; border-radius: 12px; background: var(--panel-bg); border: 1px solid var(--border); }
 
-        .btn-access {
-            width: 100%; padding: 18px; background: white; color: var(--terminal-dark);
-            border: none; border-radius: 14px; font-weight: 800; cursor: pointer;
-            transition: 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+        /* --- Stats Grid --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .stat-card {
+            background: var(--panel-bg); padding: 30px; border-radius: 24px;
+            border: 1px solid var(--border); position: relative; overflow: hidden;
         }
-        .btn-access:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .stat-card::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+        }
+        .stat-district::after { background: var(--accent-district); }
+        .stat-state::after { background: var(--accent-state); }
+        .stat-founder::after { background: var(--accent-founder); }
 
-        .audit-footer { margin-top: 35px; font-family: 'JetBrains Mono'; font-size: 10px; color: #475569; border-top: 1px solid var(--border); padding-top: 20px; }
+        .stat-val { font-size: 32px; font-weight: 800; margin: 10px 0; }
+        .stat-label { font-size: 13px; color: var(--text-dim); }
+
+        /* --- Data Tables --- */
+        .data-panel {
+            background: var(--panel-bg); border-radius: 24px; border: 1px solid var(--border);
+            padding: 30px;
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; padding: 15px; color: var(--text-dim); font-size: 12px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 18px 15px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 14px; }
         
-        #error-msg { color: #fb7185; font-size: 12px; margin-bottom: 15px; display: none; }
+        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .pending { background: rgba(251, 191, 36, 0.1); color: var(--accent-founder); }
+
+        /* --- Role-Gated Content --- */
+        .founder-only { display: none; }
+        .state-only { display: none; }
+        
+        [data-user-role="founder"] .founder-only { display: block; }
+        [data-user-role="state"] .state-only { display: block; }
     </style>
 </head>
-<body>
+<body id="dashboard-body" data-user-role="district">
 
-<canvas id="canvas-bg"></canvas>
-
-<div class="login-card">
-    <div class="admin-icon" id="main-icon">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-    </div>
-
-    <h1 id="header-text">Access Point</h1>
-    <div class="status-line">TERMINAL STATUS: <span style="color:var(--state-emerald)">READY_FOR_HANDSHAKE</span></div>
-
-    <div class="role-selector">
-        <div class="role-option active" data-role="district" onclick="setRole('district')">District</div>
-        <div class="role-option" data-role="state" onclick="setRole('state')">State</div>
-        <div class="role-option" data-role="founder" onclick="setRole('founder')">Founder</div>
-    </div>
-
-    <div id="error-msg">INVALID_CREDENTIALS_ACCESS_DENIED</div>
-
-    <form id="adminForm">
-        <div class="input-box">
-            <label id="user-label">District Auth ID</label>
-            <input type="text" id="username" placeholder="SEC-ID-XXXX" required>
-        </div>
-        <div class="input-box">
-            <label>Master Pass-Key</label>
-            <input type="password" id="password" placeholder="••••••••" required>
+    <aside>
+        <div class="brand">
+            <div style="width: 32px; height: 32px; background: white; border-radius: 8px;"></div>
+            <div>
+                KaagazSeva
+                <div id="role-tag" class="role-badge">District Access</div>
+            </div>
         </div>
 
-        <button type="submit" class="btn-access" id="loginBtn">Initialize Connection</button>
-    </form>
+        <div class="nav-group">
+            <div class="nav-label">Core Monitor</div>
+            <a href="#" class="nav-item active">Overview</a>
+            <a href="#" class="nav-item">Applications</a>
+            <a href="#" class="nav-item">Agents</a>
+        </div>
 
-    <div class="audit-footer">
-        SID: <span id="session-id">---</span> | NODE: <span id="ip-display">0.0.0.0</span><br>
-        SYSTEM_AUTH_LEVEL: <span id="auth-level">LEVEL_1</span>
-    </div>
-</div>
+        <div class="nav-group state-only">
+            <div class="nav-label">Regional Control</div>
+            <a href="#" class="nav-item">District Performance</a>
+            <a href="#" class="nav-item">Revenue Reports</a>
+        </div>
 
-<script>
-    let currentRole = 'district';
+        <div class="nav-group founder-only">
+            <div class="nav-label">Root Administration</div>
+            <a href="#" class="nav-item">Global Ledger</a>
+            <a href="#" class="nav-item">System Logs</a>
+            <a href="#" class="nav-item" style="color: #fb7185;">Security Protocols</a>
+        </div>
 
-    function setRole(role) {
-        currentRole = role;
-        // Update UI visuals
-        document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
-        document.querySelector(`[data-role="${role}"]`).classList.add('active');
-        
-        const btn = document.getElementById('loginBtn');
-        const userLabel = document.getElementById('user-label');
-        const icon = document.getElementById('main-icon');
+        <div style="margin-top: auto;">
+            <a href="#" onclick="logout()" class="nav-item">Termination Session</a>
+        </div>
+    </aside>
 
-        if(role === 'district') {
-            userLabel.innerText = "District Auth ID";
-            btn.innerText = "Initialize Node Connection";
-            icon.style.color = 'var(--district-sky)';
-            document.getElementById('auth-level').innerText = "LEVEL_1";
-        } else if(role === 'state') {
-            userLabel.innerText = "State Admin Portal ID";
-            btn.innerText = "Establish State Authority";
-            icon.style.color = 'var(--state-emerald)';
-            document.getElementById('auth-level').innerText = "LEVEL_2";
-        } else {
-            userLabel.innerText = "Founder Root Key";
-            btn.innerText = "Bypass to Master Root";
-            icon.style.color = 'var(--founder-gold)';
-            document.getElementById('auth-level').innerText = "LEVEL_ROOT";
-        }
-    }
+    <main>
+        <header>
+            <div>
+                <h1 id="welcome-text">District Control Node</h1>
+                <p style="color: var(--text-dim); font-size: 14px;">Operational Status: <span style="color: var(--accent-state)">Online</span></p>
+            </div>
+            <div class="user-profile">
+                <div class="user-info">
+                    <p style="font-weight: 700;" id="user-display-name">Auth_Node_701</p>
+                    <p style="font-size: 12px; color: var(--text-dim);">IP: 192.168.1.45</p>
+                </div>
+                <div class="avatar"></div>
+            </div>
+        </header>
 
-    // High-Security: Generate Session ID on fly
-    document.getElementById('session-id').innerText = Math.random().toString(36).substring(2, 10).toUpperCase();
+        <div class="stats-grid">
+            <div class="stat-card stat-district">
+                <div class="stat-label">Pending Reviews</div>
+                <div class="stat-val">24</div>
+                <div style="font-size: 11px; color: var(--accent-state)">+4 New Today</div>
+            </div>
+            <div class="stat-card stat-state">
+                <div class="stat-label">Verified Documents</div>
+                <div class="stat-val">1,208</div>
+                <div style="font-size: 11px; color: var(--text-dim)">Total processing cycle</div>
+            </div>
+            <div class="stat-card stat-founder founder-only">
+                <div class="stat-label">Platform Revenue</div>
+                <div class="stat-val">₹4,82,900</div>
+                <div style="font-size: 11px; color: var(--accent-founder)">Live global settlement</div>
+            </div>
+        </div>
 
-    // IP Audit
-    fetch('https://api.ipify.org?format=json')
-        .then(res => res.json())
-        .then(data => document.getElementById('ip-display').innerText = data.ip);
+        <div class="data-panel">
+            <h2 style="font-size: 18px;">Recent Activity Logs</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reference ID</th>
+                        <th>Applicant</th>
+                        <th>Service Type</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="activity-body">
+                    <tr>
+                        <td style="font-family: 'JetBrains Mono'; color: var(--accent-district);">#KS-9012</td>
+                        <td>Rahul Verma</td>
+                        <td>PAN Application</td>
+                        <td><span class="status-pill pending">Pending</span></td>
+                        <td><button style="background:none; border:none; color:white; cursor:pointer; font-weight:700;">Inspect</button></td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </main>
 
-    // Canvas Matrix Background Effect
-    const canvas = document.getElementById('canvas-bg');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const chars = "010101SECURITYSYSTEMKAAGAZSEVA";
-    const drops = Array(Math.floor(canvas.width/20)).fill(1);
+    <script>
+        // --- Security & Role Logic ---
+        window.onload = () => {
+            const role = localStorage.getItem("admin_role") || "district";
+            const body = document.getElementById('dashboard-body');
+            const roleTag = document.getElementById('role-tag');
+            const welcome = document.getElementById('welcome-text');
 
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(2, 6, 23, 0.05)";
-        ctx.fillRect(0,0,canvas.width, canvas.height);
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "15px Courier New";
-        drops.forEach((y, i) => {
-            const text = chars[Math.floor(Math.random()*chars.length)];
-            ctx.fillText(text, i*20, y*20);
-            if(y*20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        });
-    }
-    setInterval(drawMatrix, 50);
+            body.setAttribute('data-user-role', role);
 
-    // Submission Logic
-    document.getElementById('adminForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('loginBtn');
-        const err = document.getElementById('error-msg');
-        
-        btn.innerText = "SYNCHRONIZING...";
-        btn.disabled = true;
-
-        const payload = {
-            username: document.getElementById('username').value,
-            password: document.getElementById('password').value,
-            role: currentRole // Sending the role to backend
+            if(role === 'founder') {
+                roleTag.innerText = "Platform Founder";
+                roleTag.style.background = "var(--accent-founder)";
+                roleTag.style.color = "#000";
+                welcome.innerText = "System Global Command";
+            } else if(role === 'state') {
+                roleTag.innerText = "State Authority";
+                roleTag.style.background = "var(--accent-state)";
+                roleTag.style.color = "#000";
+                welcome.innerText = "Regional Oversight Hub";
+            } else {
+                roleTag.innerText = "District Node";
+                roleTag.style.background = "var(--accent-district)";
+                roleTag.style.color = "#000";
+                welcome.innerText = "District Control Center";
+            }
         };
 
-        try {
-            // Updated to use the Role-Based Backend endpoint
-            const res = await fetch(`http://localhost:5000/api/admin/login`, {
-                method: "POST",
-                headers: {"Content-Type":"application/json"},
-                body: JSON.stringify(payload)
-            });
-            const data = await res.json();
-
-            if(res.ok) {
-                localStorage.setItem("admin_token", data.access_token);
-                localStorage.setItem("admin_role", currentRole);
-                btn.innerText = "AUTH_SUCCESS";
-                setTimeout(() => window.location.href = "admin-dashboard.html", 800);
-            } else {
-                err.style.display = 'block';
-                btn.disabled = false;
-                btn.innerText = "RETRY_CONNECTION";
-            }
-        } catch(e) {
-            btn.disabled = false;
-            btn.innerText = "CONNECTION_LOST";
+        function logout() {
+            localStorage.clear();
+            window.location.href = "admin-login.html";
         }
-    });
-</script>
-
+    </script>
 </body>
 </html>
