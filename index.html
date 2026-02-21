@@ -3,264 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaagazSeva | The Gold Standard in Documentation</title>
+    <title>KaagazSeva | Premier Document Network</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --brand: #0052CC;
-            --brand-dark: #0747A6;
-            --accent: #FFAB00;
-            --bg: #030712;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --founder-glow: #00E5FF;
+            --brand: #0061FF;
+            --brand-soft: #e0ebff;
+            --dark: #020617;
+            --glass: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(0,0,0,0.06);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --neon: #00f2ff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus+Jakarta+Sans', sans-serif; }
-        
-        body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            overflow-x: hidden;
-            min-height: 100vh;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #ffffff; color: var(--text-main); overflow-x: hidden; }
+
+        /* --- Dynamic Backdrop --- */
+        .aura {
+            position: fixed; top: -10%; left: -10%; width: 50%; height: 50%;
+            background: radial-gradient(circle, rgba(0,97,255,0.08) 0%, transparent 70%);
+            z-index: -1; filter: blur(100px); pointer-events: none;
         }
 
-        /* --- Animated Mesh Background --- */
-        .mesh-gradient {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(at 0% 0%, rgba(0, 82, 204, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(255, 171, 0, 0.05) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(0, 229, 255, 0.05) 0px, transparent 50%);
-            z-index: -1;
-            filter: blur(80px);
-        }
-
-        /* --- Floating Premium Header --- */
+        /* --- Premium Header --- */
         header {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 1200px; height: 70px;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
+            position: fixed; top: 0; width: 100%; height: 80px;
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; z-index: 1000;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 0 6%; background: var(--glass); backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid var(--card-border);
         }
 
         .logo {
-            font-size: 20px; font-weight: 800; color: #fff;
+            font-size: 22px; font-weight: 800; color: var(--dark);
             text-decoration: none; display: flex; align-items: center; gap: 12px;
             letter-spacing: -0.5px;
         }
 
-        .logo-icon {
-            width: 32px; height: 32px; background: var(--brand);
-            border-radius: 8px; display: grid; place-items: center;
-            box-shadow: 0 0 20px rgba(0, 82, 204, 0.4);
+        .logo-box {
+            width: 36px; height: 36px; background: var(--brand);
+            border-radius: 10px; display: grid; place-items: center;
+            box-shadow: 0 8px 16px rgba(0,97,255,0.2);
+        }
+
+        /* --- Founder Button (Premium) --- */
+        #founderBtn {
+            background: #000; color: var(--neon); border: 1px solid var(--neon);
+            padding: 10px 20px; border-radius: 100px; font-size: 11px;
+            font-weight: 800; letter-spacing: 1px; cursor: pointer;
+            display: none; align-items: center; gap: 8px; transition: 0.3s;
         }
 
         /* --- Hero Section --- */
         .hero {
-            padding: 180px 5% 60px; text-align: center;
+            padding: 180px 6% 100px; text-align: center; max-width: 1200px; margin: 0 auto;
         }
 
         .hero h1 {
-            font-size: clamp(40px, 8vw, 72px); font-weight: 800; line-height: 1;
-            margin-bottom: 24px; letter-spacing: -2px;
+            font-size: clamp(40px, 6vw, 75px); font-weight: 800; line-height: 1.1;
+            letter-spacing: -3px; color: var(--dark); margin-bottom: 25px;
         }
 
-        .hero h1 span {
-            background: linear-gradient(to right, #60a5fa, #2563eb);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .hero h1 span { color: var(--brand); }
 
         .hero p {
-            color: var(--text-dim); font-size: 18px; max-width: 600px; margin: 0 auto 40px;
+            font-size: 20px; color: var(--text-muted); max-width: 700px; margin: 0 auto 50px;
+            line-height: 1.6; font-weight: 400;
         }
 
-        /* --- Bento Search Bar --- */
-        .search-bento {
-            max-width: 800px; margin: 0 auto;
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            padding: 12px; border-radius: 24px;
-            display: flex; gap: 12px; align-items: center;
+        /* --- State Selector Gateway --- */
+        .state-gateway {
+            background: #f8fafc; border: 1px solid var(--card-border);
+            padding: 12px; border-radius: 24px; max-width: 600px; margin: 0 auto;
+            display: flex; gap: 10px; box-shadow: 0 20px 40px rgba(0,0,0,0.04);
         }
 
         select {
-            flex: 1; background: transparent; border: none; color: white;
-            padding: 15px 20px; font-size: 16px; font-weight: 600; outline: none;
-            cursor: pointer;
+            flex: 1; border: none; background: transparent; padding: 0 20px;
+            font-size: 16px; font-weight: 600; outline: none; cursor: pointer;
+            appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 15px center;
         }
 
-        select option { background: #0f172a; color: white; }
-
-        .btn-premium {
-            background: #fff; color: #000; padding: 16px 32px;
-            border-radius: 16px; font-weight: 700; border: none;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .btn-main {
+            background: var(--brand); color: white; padding: 18px 40px;
+            border-radius: 18px; border: none; font-weight: 700; cursor: pointer;
+            transition: 0.3s; font-size: 16px;
         }
 
-        .btn-premium:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,97,255,0.2); }
 
         /* --- Service Bento Grid --- */
+        .service-section { padding: 80px 6%; display: none; }
+        .service-section.active { display: block; animation: fadeInUp 0.8s ease; }
+
         .bento-grid {
-            display: grid; padding: 60px 5%; max-width: 1300px; margin: 0 auto;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 24px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px; max-width: 1300px; margin: 0 auto;
         }
 
         .bento-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px; padding: 40px;
-            transition: 0.4s; position: relative; overflow: hidden;
+            background: #ffffff; border: 1px solid var(--card-border);
+            border-radius: 32px; padding: 40px; transition: 0.4s;
+            position: relative; overflow: hidden;
         }
 
-        .bento-card:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-5px);
+        .bento-card:hover { border-color: var(--brand); transform: scale(1.02); }
+        
+        .bento-card .icon { 
+            width: 50px; height: 50px; background: var(--brand-soft);
+            border-radius: 14px; display: grid; place-items: center; margin-bottom: 25px;
+            font-size: 24px;
         }
 
-        .bento-card h3 { font-size: 24px; margin-bottom: 12px; font-weight: 700; }
-        .bento-card p { color: var(--text-dim); line-height: 1.6; font-size: 15px; margin-bottom: 25px; }
-
-        .price-badge {
-            display: inline-block; padding: 6px 14px; background: rgba(255,255,255,0.1);
-            border-radius: 100px; font-size: 12px; font-weight: 800; color: var(--accent);
-            margin-bottom: 15px;
+        .price-tag {
+            position: absolute; top: 40px; right: 40px;
+            font-weight: 800; color: var(--brand); font-size: 14px;
         }
 
-        /* --- Drawer & Overlays --- */
+        /* --- Drawer Systems --- */
         .drawer {
-            position: fixed; top: 0; right: -450px; width: 450px; height: 100%;
-            background: #0f172a; z-index: 2001; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 50px; border-left: 1px solid var(--glass-border);
+            position: fixed; top: 0; right: -400px; width: 400px; height: 100%;
+            background: white; z-index: 2001; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 50px; box-shadow: -20px 0 60px rgba(0,0,0,0.05);
         }
         .drawer.active { right: 0; }
-        
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
             visibility: hidden; opacity: 0; transition: 0.3s; z-index: 2000;
         }
         .overlay.active { visibility: visible; opacity: 1; }
 
-        /* --- Utility --- */
-        .founder-mode {
-            background: none; border: 1px solid var(--founder-glow);
-            color: var(--founder-glow); padding: 8px 16px; border-radius: 10px;
-            font-size: 12px; font-weight: 800; text-transform: uppercase;
-            cursor: pointer; display: none;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 48px; }
-            .search-bento { flex-direction: column; border-radius: 32px; }
-            .btn-premium { width: 100%; }
             .drawer { width: 100%; }
+            .hero h1 { font-size: 45px; }
+            .state-gateway { flex-direction: column; padding: 20px; border-radius: 32px; }
         }
     </style>
 </head>
 <body>
 
-<div class="mesh-gradient"></div>
+<div class="aura"></div>
 
 <header>
     <a href="/" class="logo">
-        <div class="logo-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div class="logo-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         KaagazSeva
     </a>
-    
-    <div style="display: flex; align-items: center; gap: 20px;">
-        <button id="founderBtn" class="founder-mode" onclick="location.href='/founder'">System Core</button>
-        <div onclick="toggleDrawer()" style="cursor:pointer; padding: 10px;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </div>
+
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <button id="founderBtn" onclick="location.href='/system-core'">
+            <span style="width:8px; height:8px; background:var(--neon); border-radius:50%;"></span>
+            SYSTEM CORE
+        </button>
+        <svg onclick="toggleDrawer()" style="cursor:pointer" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </div>
 </header>
 
 <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px;">
-        <h2 style="font-size: 32px; font-weight: 800;">Navigation</h2>
-        <span onclick="toggleDrawer()" style="cursor:pointer; font-size: 30px;">&times;</span>
+    <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 40px;">Portal</h2>
+    <div id="authContent">
+        <a href="/login" style="display:block; padding: 15px 0; text-decoration:none; color:var(--dark); font-weight:700; border-bottom:1px solid #eee;">Client Login</a>
+        <a href="/agent" style="display:block; padding: 15px 0; text-decoration:none; color:var(--dark); font-weight:700; border-bottom:1px solid #eee;">Agent Gateway</a>
     </div>
-    
-    <div id="userProfile" style="background: rgba(255,255,255,0.03); padding: 30px; border-radius: 24px; border: 1px solid var(--glass-border); margin-bottom: 30px; display: none;">
-        <p id="userRole" style="color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px;"></p>
-        <p id="userName" style="font-size: 20px; font-weight: 700;"></p>
-    </div>
-
-    <nav style="display: flex; flex-direction: column; gap: 25px;">
-        <a href="/login" style="color: white; text-decoration: none; font-size: 18px; font-weight: 600;">Client Login</a>
-        <a href="/register" style="color: white; text-decoration: none; font-size: 18px; font-weight: 600;">Partner Registration</a>
-        <a href="/tracking" style="color: white; text-decoration: none; font-size: 18px; font-weight: 600;">Track Application</a>
-    </nav>
 </div>
 
 <section class="hero">
-    <h1>Premier <span>Documentation</span><br>For Global Indians.</h1>
-    <p>The smartest way to handle government services. Authenticated, high-speed, and purely digital.</p>
+    <h1>Premier Services For <span>Digital Indians.</span></h1>
+    <p>Select your jurisdiction to unlock state-specific verified documentation services.</p>
     
-    <div class="search-bento">
-        <select id="stateSelect">
+    <div class="state-gateway">
+        <select id="stateSelector">
             <option value="">Querying States...</option>
         </select>
-        <button class="btn-premium" onclick="loadServices()">Access Services</button>
+        <button class="btn-main" onclick="fetchStateServices()">View Services</button>
     </div>
 </section>
 
-<div id="serviceGrid" class="bento-grid">
+<section id="servicesSection" class="service-section">
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h2 id="selectedStateTitle" style="font-size: 32px; font-weight: 800;">State Services</h2>
+        <p style="color: var(--text-muted);">Verified local documentation processing</p>
     </div>
+    <div id="serviceGrid" class="bento-grid">
+        </div>
+</section>
 
 <script src="config.js"></script>
 <script>
-    // 1. Fetch States Live
+    // 1. Fetch States from Supabase via API
     async function loadStates() {
         try {
             const response = await fetch(`${API_BASE_URL}/api/states`);
             const states = await response.json();
-            const select = document.getElementById('stateSelect');
-            select.innerHTML = '<option value="">Select Region</option>';
-            states.forEach(state => {
-                select.innerHTML += `<option value="${state.id}">${state.state_name}</option>`;
+            const select = document.getElementById('stateSelector');
+            select.innerHTML = '<option value="">Choose State</option>';
+            states.forEach(st => {
+                select.innerHTML += `<option value="${st.id}">${st.state_name}</option>`;
             });
-        } catch (err) { console.error("Database Connection Lost"); }
+        } catch (e) { console.error("Database connection failed"); }
     }
 
-    // 2. Fetch Services with Bento Style
-    async function loadServices() {
-        const stateId = document.getElementById('stateSelect').value;
-        if(!stateId) return;
+    // 2. Fetch Separated Services for the selected state
+    async function fetchStateServices() {
+        const stateId = document.getElementById('stateSelector').value;
+        const stateName = document.getElementById('stateSelector').options[document.getElementById('stateSelector').selectedIndex].text;
+        
+        if(!stateId) return alert("Please select a state");
 
         const grid = document.getElementById('serviceGrid');
-        grid.innerHTML = '<div style="grid-column: 1/-1; padding: 100px; text-align: center; opacity: 0.5;">Connecting to Secure Server...</div>';
-
+        const section = document.getElementById('servicesSection');
+        
         try {
             const response = await fetch(`${API_BASE_URL}/api/services?state_id=${stateId}`);
             const services = await response.json();
             
+            document.getElementById('selectedStateTitle').innerText = `${stateName} Services`;
             grid.innerHTML = '';
-            services.forEach((s, index) => {
+            
+            services.forEach(s => {
                 grid.innerHTML += `
-                    <div class="bento-card" style="animation: fadeUp 0.5s ease forwards ${index * 0.1}s; opacity: 0;">
-                        <div class="price-badge">Premium Service • ₹${s.price}</div>
-                        <h3>${s.service_name}</h3>
-                        <p>${s.description}</p>
-                        <button class="btn-premium" style="width:100%; background: var(--brand); color: white;" onclick="apply('${s.id}')">Begin Application</button>
+                    <div class="bento-card">
+                        <div class="price-tag">EST. ₹${s.price}</div>
+                        <div class="icon">📜</div>
+                        <h3 style="margin-bottom:12px; font-weight:700;">${s.service_name}</h3>
+                        <p style="color:var(--text-muted); font-size:14px; margin-bottom:30px;">${s.description}</p>
+                        <button class="btn-main" style="width:100%; padding:15px;" onclick="apply('${s.id}')">Start Now</button>
                     </div>
                 `;
             });
-        } catch (err) { grid.innerHTML = '<p>Service Layer Unavailable.</p>'; }
+
+            section.classList.add('active');
+            window.scrollTo({ top: section.offsetTop - 100, behavior: 'smooth' });
+            
+        } catch (e) { alert("Error fetching services"); }
     }
 
     function toggleDrawer() {
@@ -268,29 +254,17 @@
         document.getElementById('overlay').classList.toggle('active');
     }
 
-    // 3. User Session Verification
-    async function checkSession() {
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/auth/me`);
-            if(res.ok) {
-                const user = await res.json();
-                document.getElementById('userProfile').style.display = 'block';
-                document.getElementById('userName').innerText = user.full_name;
-                document.getElementById('userRole').innerText = user.role;
-                if(user.role === 'founder') document.getElementById('founderBtn').style.display = 'block';
-            }
-        } catch (e) {}
+    // Check session via DB (No local storage)
+    async function checkAuth() {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`);
+        if(res.ok) {
+            const user = await res.json();
+            if(user.role === 'founder') document.getElementById('founderBtn').style.display = 'flex';
+        }
     }
 
-    window.onload = () => { loadStates(); checkSession(); };
+    window.onload = () => { loadStates(); checkAuth(); };
 </script>
-
-<style>
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
 
 </body>
 </html>
