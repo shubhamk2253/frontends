@@ -203,15 +203,31 @@
             background: #0f172a;
             color: #94a3b8;
             padding: 80px 40px;
-            text-align: center;
+            text-align: left;
             font-size: 15px;
         }
+        .footer-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+        }
+        .footer-link {
+            color: #94a3b8;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: 0.3s;
+        }
+        .footer-link:hover { color: var(--white); }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .hero h1 { font-size: 42px; letter-spacing: -1px; }
             header { padding: 0 20px; }
             .drawer { width: 100%; right: -100%; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
         }
     </style>
 </head>
@@ -270,7 +286,9 @@
     <div class="drawer-section" style="margin-top:auto;">
         <label>Help & Legal</label>
         <a href="support.html" class="drawer-link">Support Desk</a>
-        <a href="#" class="drawer-link">Privacy Policy</a>
+        <a href="terms.html" class="drawer-link">Terms of Service</a>
+        <a href="privacy.html" class="drawer-link">Privacy Policy</a>
+        <a href="refund.html" class="drawer-link">Refund Policy</a>
     </div>
 </div>
 
@@ -307,11 +325,25 @@
 </section>
 
 <footer>
-    <div style="margin-bottom: 25px;">
-        <strong style="color:white; font-size:20px; letter-spacing: -0.5px;">KaagazSeva India</strong>
+    <div class="footer-grid">
+        <div>
+            <strong style="color:white; font-size:20px; letter-spacing: -0.5px; display: block; margin-bottom: 15px;">KaagazSeva India</strong>
+            <p style="margin-bottom: 20px;">Empowering the nation through transparent and accessible documentation services. Your trusted partner for government applications.</p>
+            <p>© 2026 KaagazSeva. All rights reserved.</p>
+        </div>
+        <div>
+            <label style="color:white; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:20px;">Quick Links</label>
+            <a href="apply-service.html" class="footer-link">Our Services</a>
+            <a href="track.html" class="footer-link">Track Application</a>
+            <a href="support.html" class="footer-link">Help Center</a>
+        </div>
+        <div>
+            <label style="color:white; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:20px;">Legal</label>
+            <a href="terms.html" class="footer-link">Terms & Conditions</a>
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>
+            <a href="refund.html" class="footer-link">Refund Policy</a>
+        </div>
     </div>
-    <p>© 2026 KaagazSeva. All rights reserved. 
-    <br><span style="opacity: 0.7; margin-top: 10px; display: block;">Empowering the nation through transparent documentation.</span></p>
 </footer>
 
 <script src="config.js"></script>
@@ -327,12 +359,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const founderBtn = document.getElementById('founderBtn');
 
-        // Logic for "System Core" Button Visibility
         if(role === 'founder' || urlParams.has('root')) {
             founderBtn.style.display = 'flex';
         }
 
-        // Update Drawer Content if Logged In
         if(token) {
             document.getElementById('auth-links').innerHTML = `
                 <div style="padding:20px; background:#f1f5f9; border-radius:16px; margin-bottom:20px; border: 1px solid rgba(10, 79, 163, 0.1);">
