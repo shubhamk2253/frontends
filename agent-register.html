@@ -93,6 +93,14 @@
         .summary-box { background: #f8fafc; padding: 20px; border-radius: 18px; margin: 20px 0; border: 1px solid var(--border); }
         .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
         .summary-row:last-child { border: none; }
+
+        /* Agreement Styling */
+        .legal-check {
+            display: flex; align-items: flex-start; gap: 10px; margin: 15px 0; cursor: pointer;
+        }
+        .legal-check input { width: 18px; height: 18px; margin-top: 2px; cursor: pointer; }
+        .legal-check span { font-size: 13px; font-weight: 500; color: var(--text-body); text-transform: none; letter-spacing: normal; }
+        .legal-check a { color: var(--primary); text-decoration: none; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -148,6 +156,11 @@
         <div class="summary-row"><span>Mobile</span><strong id="rev-mobile"></strong></div>
         <div class="summary-row"><span>Jurisdiction</span><strong id="rev-area"></strong></div>
     </div>
+
+    <label class="legal-check">
+        <input type="checkbox" id="agree">
+        <span>I agree to the <a href="terms.html" target="_blank">Agent Legal Agreement</a> and service guidelines.</span>
+    </label>
 
     <div id="otp-box" style="display: none;">
         <label>Enter Security OTP</label>
@@ -205,6 +218,12 @@
     }
 
     async function requestOtp() {
+        // Validation for the checkbox before requesting OTP
+        if(!document.getElementById("agree").checked){
+            alert("You must accept the agreement before proceeding.");
+            return;
+        }
+
         const mobile = document.getElementById('mobile').value;
         const btn = document.getElementById('requestOtpBtn');
         btn.innerText = "Connecting...";
@@ -223,6 +242,12 @@
     }
 
     async function finalSubmit() {
+        // Double check agreement status on final submit
+        if(!document.getElementById("agree").checked){
+            alert("You must accept the agreement");
+            return;
+        }
+
         const payload = {
             name: document.getElementById('name').value,
             mobile: document.getElementById('mobile').value,
@@ -231,7 +256,6 @@
             otp: document.getElementById('otp').value
         };
 
-        // Note: You would call your agent registration endpoint here
         fetch(`${API_BASE}/api/agent/register`, {
             method: "POST",
             headers: {"Content-Type":"application/json"},
