@@ -58,48 +58,56 @@
 
 <script src="config.js"></script>
 <script>
-
-document.getElementById("applyForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    
-    const btn = document.getElementById("submitBtn");
-    btn.disabled = true;
-    btn.innerText = "Processing...";
-
-    const formData = new FormData(this);
-
-    try {
-        // 1. Submit application using global API_BASE from config.js
-        const res = await fetch(`${API_BASE}/api/apply-service`, {
-            method: "POST",
-            body: formData
-        });
-
-        const data = await res.json();
-
-        if(!data.success){
-            throw new Error(data.message || "Application failed");
-        }
-
-        const appId = data.application_id;
-
-        // 2. Fetch service price dynamically
-        const serviceName = document.getElementById("service").value;
-
-        const priceRes = await fetch(`${API_BASE}/api/service-price?service=${encodeURIComponent(serviceName)}`);
-        const priceData = await priceRes.json();
-
-        const amount = priceData.price || 500;
-
-        // 3. Redirect to payment page (FIXED: changed payment.html to payments.html)
-        window.location.href = `payments.html?app_id=${appId}&amount=${amount}`;
-
-    } catch(err){
-        alert(err.message);
-        btn.disabled = false;
-        btn.innerText = "Submit Request & Pay";
+    /* 🔐 PART 1 — Check login before anything loads */
+    if (!localStorage.getItem("token")) {
+        window.location.href = "login.html";
     }
-});
+
+    /* 📝 PART 2 — Handle Form Submission */
+    document.getElementById("applyForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+
+        const formData = new FormData(this);
+        const token = localStorage.getItem("token"); // Retrieve the JWT token
+
+        try {
+            // 1. Submit application with Authorization Header
+            const res = await fetch(`${API_BASE}/api/apply-service`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}` // Required by your Flask @jwt_required() route
+                },
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if(!data.success){
+                throw new Error(data.message || "Application failed");
+            }
+
+            const appId = data.application_id;
+
+            // 2. Fetch service price dynamically
+            const serviceName = document.getElementById("service").value;
+            const priceRes = await fetch(`${API_BASE}/api/service-price?service=${encodeURIComponent(serviceName)}`);
+            const priceData = await priceRes.json();
+
+            const amount = priceData.price || 500;
+
+            // 3. Redirect to payment page
+            window.location.href = `payments.html?app_id=${appId}&amount=${amount}`;
+
+        } catch(err){
+            alert(err.message);
+            btn.disabled = false;
+            btn.innerText = "Submit Request & Pay";
+        }
+    });
 </script>
 
 </body>
