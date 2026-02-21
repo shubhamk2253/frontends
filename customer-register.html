@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - KaagazSeva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0a4fa3;
+            --primary-hover: #083d7e;
+            --bg-body: #f4f7ff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --error: #ef4444;
+            --success: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-dark); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+
+        .reg-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .logo-text { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .header p { color: var(--text-muted); font-size: 15px; }
+
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-dark); }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(10, 79, 163, 0.1);
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-register:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-register:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+
+        .footer-links { text-align: center; margin-top: 25px; font-size: 14px; color: var(--text-muted); }
+        .footer-links a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        .footer-links a:hover { text-decoration: underline; }
+
+        /* Status Messages */
+        .msg { padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; display: none; }
+        .msg-error { background: #fee2e2; color: var(--error); border: 1px solid #fecaca; }
+        .msg-success { background: #d1fae5; color: var(--success); border: 1px solid #a7f3d0; }
+
+        /* Verification Step */
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="reg-card">
+    <div class="header">
+        <div class="logo-text">KaagazSeva</div>
+        <h1 id="main-title">Join Us</h1>
+        <p id="sub-title">Create your customer account to start applying.</p>
+    </div>
+
+    <div id="status-msg" class="msg"></div>
+
+    <form id="registrationForm">
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="e.g. Rahul Sharma" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <input type="tel" id="mobile" placeholder="10-digit mobile number" maxlength="10" pattern="[0-9]{10}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="state">State</label>
+            <select id="state" required>
+                <option value="">Select State</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Gujarat">Gujarat</option>
+                </select>
+        </div>
+
+        <button type="submit" class="btn-register" id="regBtn">Request OTP</button>
+    </form>
+
+    <div id="otpSection" class="hidden">
+        <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="text" id="otp" placeholder="6-digit code" maxlength="6">
+        </div>
+        <button class="btn-register" id="verifyBtn">Verify & Create Account</button>
+        <p style="text-align: center; margin-top: 15px; font-size: 13px;">
+            Didn't get code? <a href="#" id="resendOtp" style="color: var(--primary); font-weight: 600;">Resend</a>
+        </p>
+    </div>
+
+    <div class="footer-links">
+        Already have an account? <a href="customer-login.html">Login here</a>
+    </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+    const regForm = document.getElementById('registrationForm');
+    const otpSection = document.getElementById('otpSection');
+    const statusMsg = document.getElementById('status-msg');
+    const regBtn = document.getElementById('regBtn');
+    
+    let userMobile = "";
+
+    function showStatus(text, isError = true) {
+        statusMsg.innerText = text;
+        statusMsg.className = isError ? 'msg msg-error' : 'msg msg-success';
+        statusMsg.style.display = 'block';
+    }
+
+    // --- STEP 1: Registration / Send OTP ---
+    regForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        userMobile = document.getElementById('mobile').value;
+        const name = document.getElementById('fullName').value;
+
+        regBtn.disabled = true;
+        regBtn.innerText = "Sending OTP...";
+
+        try {
+            // Calling your backend send-otp endpoint
+            const res = await fetch(`${API_BASE}/api/send-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mobile: userMobile, name: name })
+            });
+            
+            const data = await res.json();
+
+            if (res.ok) {
+                regForm.classList.add('hidden');
+                otpSection.classList.remove('hidden');
+                document.getElementById('main-title').innerText = "Verify Mobile";
+                document.getElementById('sub-title').innerText = `Enter the code sent to ${userMobile}`;
+                showStatus("OTP sent successfully!", false);
+            } else {
+                showStatus(data.error || "Something went wrong");
+                regBtn.disabled = false;
+                regBtn.innerText = "Request OTP";
+            }
+        } catch (err) {
+            showStatus("Connection failed. Check your backend.");
+            regBtn.disabled = false;
+            regBtn.innerText = "Request OTP";
+        }
+    });
+
+    // --- STEP 2: Verify OTP & Redirect ---
+    document.getElementById('verifyBtn').addEventListener('click', async () => {
+        const otp = document.getElementById('otp').value;
+        const verifyBtn = document.getElementById('verifyBtn');
+
+        if (otp.length !== 6) return showStatus("Enter a valid 6-digit OTP");
+
+        verifyBtn.disabled = true;
+        verifyBtn.innerText = "Processing...";
+
+        try {
+            const res = await fetch(`${API_BASE}/api/verify-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mobile: userMobile, otp: otp })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                localStorage.setItem("token", data.access_token);
+                showStatus("Registration successful! Redirecting...", false);
+                setTimeout(() => {
+                    window.location.href = "index.html"; 
+                }, 2000);
+            } else {
+                showStatus(data.error || "Invalid OTP");
+                verifyBtn.disabled = false;
+                verifyBtn.innerText = "Verify & Create Account";
+            }
+        } catch (err) {
+            showStatus("Verification failed. Try again.");
+            verifyBtn.disabled = false;
+            verifyBtn.innerText = "Verify & Create Account";
+        }
+    });
+</script>
+
+</body>
+</html>
