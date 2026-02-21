@@ -3,195 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Authentication | KaagazSeva</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Login | KaagazSeva Administrative Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Professional Color Palette */
-            --primary: #1e293b;
-            --district-color: #0284c7;
-            --state-color: #059669;
-            --founder-color: #7c3aed;
-            --bg-gradient: radial-gradient(at 0% 0%, hsla(210, 40%, 96%, 1) 0, transparent 50%), 
-                           radial-gradient(at 100% 100%, hsla(220, 30%, 92%, 1) 0, transparent 50%);
-            --glass: rgba(255, 255, 255, 0.8);
-            --border: rgba(226, 232, 240, 0.8);
+            --slate-900: #0f172a;
+            --slate-600: #475569;
+            --slate-200: #e2e8f0;
+            --district: #2563eb;
+            --state: #059669;
+            --founder: #7c3aed;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
         body { 
-            background-color: #f8fafc;
-            background-image: var(--bg-gradient);
+            background: #f8fafc; 
             height: 100vh; display: flex; align-items: center; justify-content: center;
-            color: var(--primary);
+            color: var(--slate-900);
         }
 
-        /* Professional Card Design */
-        .auth-container {
+        /* Clean, Professional Card */
+        .login-card {
             width: 100%;
-            max-width: 440px;
-            padding: 48px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-            position: relative;
-        }
-
-        /* The Role Bar - Segmented Control Style */
-        .role-selector {
-            display: flex;
-            background: #f1f5f9;
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 32px;
-        }
-
-        .role-tab {
-            flex: 1;
-            padding: 10px 5px;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s all;
-            color: #64748b;
-        }
-
-        .role-tab.active {
+            max-width: 420px;
             background: white;
-            color: var(--primary);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 48px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 20px 25px -5px rgba(0,0,0,0.05);
+            border: 1px solid var(--slate-200);
         }
 
-        /* Dynamic Indicator Line */
-        .status-accent {
-            height: 4px; width: 40px;
-            border-radius: 2px;
-            background: var(--district-color);
-            margin: 0 auto 24px;
-            transition: 0.3s;
+        .header { text-align: center; margin-bottom: 40px; }
+        
+        .brand-logo {
+            font-size: 28px; font-weight: 800; letter-spacing: -1px;
+            color: var(--slate-900); margin-bottom: 8px;
         }
 
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #0f172a; }
-        p.subtitle { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 32px; }
+        .subtitle { font-size: 14px; color: var(--slate-600); font-weight: 400; }
 
-        /* Form Inputs */
-        .input-group { margin-bottom: 20px; }
+        /* Role Switcher - Segmented control style */
+        .role-nav {
+            display: flex; background: #f1f5f9; padding: 4px;
+            border-radius: 8px; margin-bottom: 30px; border: 1px solid var(--slate-200);
+        }
+
+        .role-btn {
+            flex: 1; padding: 10px; font-size: 13px; font-weight: 600;
+            cursor: pointer; border-radius: 6px; border: none;
+            background: transparent; color: var(--slate-600); transition: 0.2s;
+        }
+
+        .role-btn.active { background: white; color: var(--slate-900); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        /* Dynamic Visual Indicator */
+        .role-indicator {
+            height: 3px; width: 60px; margin: -20px auto 30px;
+            border-radius: 10px; background: var(--district);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .field { margin-bottom: 20px; }
         label { 
             display: block; font-size: 12px; font-weight: 600; 
-            color: #475569; text-transform: uppercase; letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 8px; color: var(--slate-600);
         }
 
         input {
-            width: 100%; padding: 12px 16px;
-            background: white; border: 1px solid #cbd5e1;
-            border-radius: 10px; font-size: 15px; outline: none;
-            transition: 0.2s;
+            width: 100%; padding: 12px 16px; border-radius: 8px;
+            border: 1px solid var(--slate-200); background: #ffffff;
+            font-size: 15px; transition: 0.2s; outline: none;
         }
 
-        input:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(226, 232, 240, 0.5); }
+        input:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(226, 232, 240, 0.4); }
 
-        /* Modern Professional Button */
-        .btn-login {
-            width: 100%; padding: 14px; 
-            background: #0f172a; color: white;
-            border: none; border-radius: 10px; font-weight: 600;
-            font-size: 15px; cursor: pointer; transition: 0.2s;
-            margin-top: 10px;
+        .btn-submit {
+            width: 100%; padding: 14px; background: var(--slate-900);
+            color: white; border: none; border-radius: 8px;
+            font-weight: 600; font-size: 15px; cursor: pointer;
+            transition: 0.2s; margin-top: 10px;
         }
 
-        .btn-login:hover { background: #1e293b; transform: translateY(-1px); }
+        .btn-submit:hover { background: #000; transform: translateY(-1px); }
 
-        .footer-info {
-            margin-top: 32px; border-top: 1px solid #e2e8f0;
-            padding-top: 24px; font-size: 11px; color: #94a3b8;
-            display: flex; justify-content: space-between;
-        }
-
-        #error-msg {
-            background: #fef2f2; color: #991b1b;
+        .error-box {
+            background: #fff1f2; border: 1px solid #fecdd3; color: #be123c;
             padding: 12px; border-radius: 8px; font-size: 13px;
-            margin-bottom: 20px; text-align: center; display: none;
-            border: 1px solid #fee2e2;
+            margin-bottom: 20px; display: none; text-align: center;
+        }
+
+        .footer {
+            margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--slate-200);
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 11px; color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-<div class="auth-container">
-    <div class="status-accent" id="accent-bar"></div>
-    <h1>KaagazSeva</h1>
-    <p class="subtitle">Administrative Access Terminal</p>
-
-    <div class="role-selector">
-        <div class="role-tab active" onclick="setRole('district', this)">District</div>
-        <div class="role-tab" onclick="setRole('state', this)">State</div>
-        <div class="role-tab" onclick="setRole('founder', this)">Founder</div>
+<div class="login-card">
+    <div class="header">
+        <div class="brand-logo">KaagazSeva</div>
+        <p class="subtitle">Administrative Sign-in</p>
     </div>
 
-    <div id="error-msg">Authentication failed. Please verify credentials.</div>
+    <div class="role-nav">
+        <button class="role-btn active" onclick="updateRole('district', this)">District</button>
+        <button class="role-btn" onclick="updateRole('state', this)">State</button>
+        <button class="role-btn" onclick="updateRole('founder', this)">Founder</button>
+    </div>
+    
+    <div class="role-indicator" id="indicator"></div>
+
+    <div class="error-box" id="err">Authentication Failed: Check credentials</div>
 
     <form id="loginForm">
-        <div class="input-group">
-            <label id="user-label">District Credentials</label>
-            <input type="text" id="username" placeholder="Enter Identity ID" required>
+        <div class="field">
+            <label id="user-label">District Auth ID</label>
+            <input type="text" id="username" placeholder="e.g. ADM-9021" required>
         </div>
-        <div class="input-group">
-            <label>Security Key</label>
+        <div class="field">
+            <label>Security Password</label>
             <input type="password" id="password" placeholder="••••••••" required>
         </div>
 
-        <button type="submit" class="btn-login" id="submitBtn">Sign In</button>
+        <button type="submit" class="btn-submit" id="btn">Log In to Dashboard</button>
     </form>
 
-    <div class="footer-info">
-        <span>Terminal ID: <strong id="term-id">...</strong></span>
-        <span>Secure Session</span>
+    <div class="footer">
+        <span>ENCRYPTED_SESSION</span>
+        <span>VER: 2.0.4</span>
     </div>
 </div>
 
 <script>
-    let currentRole = 'district';
-    const accents = { district: '#0284c7', state: '#059669', founder: '#7c3aed' };
+    let role = 'district';
+    const colors = { district: '#2563eb', state: '#059669', founder: '#7c3aed' };
 
-    function setRole(role, el) {
-        currentRole = role;
-        // Update Tabs
-        document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+    function updateRole(newRole, el) {
+        role = newRole;
+        // Reset buttons
+        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
         el.classList.add('active');
         
-        // Update Accent Colors
-        document.getElementById('accent-bar').style.background = accents[role];
-        
-        // Update Labels
+        // Update UI
+        const indicator = document.getElementById('indicator');
         const label = document.getElementById('user-label');
-        if(role === 'district') label.innerText = "District Credentials";
+        indicator.style.background = colors[role];
+        
+        if(role === 'district') label.innerText = "District Auth ID";
         else if(role === 'state') label.innerText = "State Authority ID";
-        else label.innerText = "Founder Root ID";
+        else label.innerText = "Master Founder ID";
     }
-
-    // Generate a Professional Terminal ID
-    document.getElementById('term-id').innerText = 'KS-' + Math.floor(1000 + Math.random() * 9000);
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const err = document.getElementById('error-msg');
+        const btn = document.getElementById('btn');
+        const err = document.getElementById('err');
         
-        btn.innerText = "Verifying...";
+        btn.innerText = "Authenticating...";
         btn.disabled = true;
         err.style.display = 'none';
 
         const payload = {
             username: document.getElementById('username').value,
             password: document.getElementById('password').value,
-            role: currentRole
+            role: role
         };
 
         try {
@@ -204,12 +184,11 @@
             if(res.ok) {
                 const data = await res.json();
                 localStorage.setItem("admin_token", data.access_token);
-                localStorage.setItem("admin_role", currentRole);
-                btn.innerText = "Redirecting...";
+                localStorage.setItem("admin_role", role);
                 window.location.href = "admin-dashboard.html";
             } else {
                 err.style.display = 'block';
-                btn.innerText = "Sign In";
+                btn.innerText = "Log In to Dashboard";
                 btn.disabled = false;
             }
         } catch(e) {
