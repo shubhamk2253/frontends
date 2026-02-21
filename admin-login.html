@@ -3,197 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration | KaagazSeva</title>
+    <title>Admin Authentication | KaagazSeva</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #0a4fa3; /* Professional Navy */
-            --text-dark: #1a1a1a;
-            --text-light: #666666;
-            --bg-soft: #fcfcfc;
-            --border: #e1e1e1;
+            /* Professional Color Palette */
+            --primary: #1e293b;
+            --district-color: #0284c7;
+            --state-color: #059669;
+            --founder-color: #7c3aed;
+            --bg-gradient: radial-gradient(at 0% 0%, hsla(210, 40%, 96%, 1) 0, transparent 50%), 
+                           radial-gradient(at 100% 100%, hsla(220, 30%, 92%, 1) 0, transparent 50%);
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: rgba(226, 232, 240, 0.8);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-soft);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid var(--border);
-        }
-
-        .header {
-            margin-bottom: 35px;
-            text-align: left;
-        }
-
-        /* Focus on the Name: Bold, Clean, Professional */
-        .brand-name {
-            font-size: 24px;
-            font-weight: 700;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body { 
+            background-color: #f8fafc;
+            background-image: var(--bg-gradient);
+            height: 100vh; display: flex; align-items: center; justify-content: center;
             color: var(--primary);
-            letter-spacing: -0.5px;
-            margin-bottom: 4px;
         }
 
-        .header p {
-            font-size: 14px;
-            color: var(--text-light);
-            font-weight: 400;
+        /* Professional Card Design */
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            padding: 48px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            position: relative;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        /* The Role Bar - Segmented Control Style */
+        .role-selector {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 32px;
         }
 
-        label {
-            display: block;
-            font-size: 12px;
+        .role-tab {
+            flex: 1;
+            padding: 10px 5px;
+            font-size: 13px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.2s all;
+            color: #64748b;
+        }
+
+        .role-tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dynamic Indicator Line */
+        .status-accent {
+            height: 4px; width: 40px;
+            border-radius: 2px;
+            background: var(--district-color);
+            margin: 0 auto 24px;
+            transition: 0.3s;
+        }
+
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; color: #0f172a; }
+        p.subtitle { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 32px; }
+
+        /* Form Inputs */
+        .input-group { margin-bottom: 20px; }
+        label { 
+            display: block; font-size: 12px; font-weight: 600; 
+            color: #475569; text-transform: uppercase; letter-spacing: 0.5px;
             margin-bottom: 8px;
-            color: var(--text-light);
         }
 
         input {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 15px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: #ffffff;
-            transition: all 0.2s ease;
-            color: var(--text-dark);
+            width: 100%; padding: 12px 16px;
+            background: white; border: 1px solid #cbd5e1;
+            border-radius: 10px; font-size: 15px; outline: none;
+            transition: 0.2s;
         }
 
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(10, 79, 163, 0.05);
-        }
+        input:focus { border-color: #94a3b8; box-shadow: 0 0 0 4px rgba(226, 232, 240, 0.5); }
 
-        input::placeholder {
-            color: #ccc;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
+        /* Modern Professional Button */
+        .btn-login {
+            width: 100%; padding: 14px; 
+            background: #0f172a; color: white;
+            border: none; border-radius: 10px; font-weight: 600;
+            font-size: 15px; cursor: pointer; transition: 0.2s;
             margin-top: 10px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
         }
 
-        .btn-submit:hover {
-            background-color: #083d7e;
+        .btn-login:hover { background: #1e293b; transform: translateY(-1px); }
+
+        .footer-info {
+            margin-top: 32px; border-top: 1px solid #e2e8f0;
+            padding-top: 24px; font-size: 11px; color: #94a3b8;
+            display: flex; justify-content: space-between;
         }
 
-        .footer-link {
-            margin-top: 25px;
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-light);
-        }
-
-        .footer-link a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
+        #error-msg {
+            background: #fef2f2; color: #991b1b;
+            padding: 12px; border-radius: 8px; font-size: 13px;
+            margin-bottom: 20px; text-align: center; display: none;
+            border: 1px solid #fee2e2;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <div class="brand-name">KaagazSeva</div>
-        <p>Complete your partner registration</p>
+<div class="auth-container">
+    <div class="status-accent" id="accent-bar"></div>
+    <h1>KaagazSeva</h1>
+    <p class="subtitle">Administrative Access Terminal</p>
+
+    <div class="role-selector">
+        <div class="role-tab active" onclick="setRole('district', this)">District</div>
+        <div class="role-tab" onclick="setRole('state', this)">State</div>
+        <div class="role-tab" onclick="setRole('founder', this)">Founder</div>
     </div>
 
-    <form id="regForm">
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" placeholder="e.g. Rahul Sharma" required>
+    <div id="error-msg">Authentication failed. Please verify credentials.</div>
+
+    <form id="loginForm">
+        <div class="input-group">
+            <label id="user-label">District Credentials</label>
+            <input type="text" id="username" placeholder="Enter Identity ID" required>
+        </div>
+        <div class="input-group">
+            <label>Security Key</label>
+            <input type="password" id="password" placeholder="••••••••" required>
         </div>
 
-        <div class="form-group">
-            <label for="mobile">Mobile Number</label>
-            <input type="tel" id="mobile" placeholder="10-digit number" maxlength="10" required>
-        </div>
-
-        <div class="form-group">
-            <label for="district">District</label>
-            <input type="text" id="district" placeholder="Enter your city/district" required>
-        </div>
-
-        <button type="submit" class="btn-submit">Create Account</button>
+        <button type="submit" class="btn-login" id="submitBtn">Sign In</button>
     </form>
 
-    <div class="footer-link">
-        Already have an account? <a href="#">Login here</a>
+    <div class="footer-info">
+        <span>Terminal ID: <strong id="term-id">...</strong></span>
+        <span>Secure Session</span>
     </div>
 </div>
 
-<script src="config.js"></script>
 <script>
-    document.getElementById('regForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    let currentRole = 'district';
+    const accents = { district: '#0284c7', state: '#059669', founder: '#7c3aed' };
+
+    function setRole(role, el) {
+        currentRole = role;
+        // Update Tabs
+        document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
         
-        // Simple loading state
-        const btn = e.target.querySelector('button');
-        btn.innerText = "Processing...";
+        // Update Accent Colors
+        document.getElementById('accent-bar').style.background = accents[role];
+        
+        // Update Labels
+        const label = document.getElementById('user-label');
+        if(role === 'district') label.innerText = "District Credentials";
+        else if(role === 'state') label.innerText = "State Authority ID";
+        else label.innerText = "Founder Root ID";
+    }
+
+    // Generate a Professional Terminal ID
+    document.getElementById('term-id').innerText = 'KS-' + Math.floor(1000 + Math.random() * 9000);
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const err = document.getElementById('error-msg');
+        
+        btn.innerText = "Verifying...";
         btn.disabled = true;
+        err.style.display = 'none';
 
         const payload = {
-            name: document.getElementById('name').value,
-            mobile: document.getElementById('mobile').value,
-            district: document.getElementById('district').value
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            role: currentRole
         };
 
         try {
-            const res = await fetch(`${API_BASE}/api/agent/register`, {
+            const res = await fetch(`http://localhost:5000/api/admin/login`, {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: {"Content-Type":"application/json"},
                 body: JSON.stringify(payload)
             });
 
             if(res.ok) {
-                alert("Registration Successful");
-                window.location.href = "login.html";
+                const data = await res.json();
+                localStorage.setItem("admin_token", data.access_token);
+                localStorage.setItem("admin_role", currentRole);
+                btn.innerText = "Redirecting...";
+                window.location.href = "admin-dashboard.html";
             } else {
-                alert("Registration failed. Please try again.");
-                btn.innerText = "Create Account";
+                err.style.display = 'block';
+                btn.innerText = "Sign In";
                 btn.disabled = false;
             }
-        } catch (err) {
-            console.error(err);
-            btn.innerText = "Create Account";
+        } catch(e) {
+            btn.innerText = "System Offline";
             btn.disabled = false;
         }
     });
