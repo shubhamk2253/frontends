@@ -1,125 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Track Application - KaagazSeva</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Status — KaagazSeva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+    <style>
+        :root {
+            --primary: #0a4fa3;
+            --primary-light: #eef4ff;
+            --success: #10b981;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+        }
 
-body{
-    background:linear-gradient(120deg,#eef3fb,#f7f9fc);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
+        body {
+            background: var(--bg);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-.container{
-    background:white;
-    padding:45px;
-    border-radius:18px;
-    width:420px;
-    box-shadow:0 12px 35px rgba(0,0,0,0.08);
-    text-align:center;
-}
+        .track-card {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
 
-h2{
-    margin-bottom:25px;
-    color:#0a4fa3;
-}
+        .header-area { text-align: center; margin-bottom: 35px; }
+        .header-area i { font-size: 40px; color: var(--primary); margin-bottom: 15px; }
+        h2 { font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
 
-input{
-    width:100%;
-    padding:14px;
-    margin:12px 0;
-    border-radius:10px;
-    border:1px solid #d6dbe6;
-    font-size:15px;
-}
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { font-size: 13px; font-weight: 700; color: var(--text-light); margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-input:focus{
-    border-color:#0a4fa3;
-    outline:none;
-    box-shadow:0 0 0 3px rgba(10,79,163,0.08);
-}
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            font-size: 16px;
+            transition: 0.3s;
+        }
 
-button{
-    width:100%;
-    padding:14px;
-    margin-top:15px;
-    background:linear-gradient(90deg,#0a4fa3,#0f6ad6);
-    color:white;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
+        input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(10, 79, 163, 0.1);
+        }
 
-.result{
-    margin-top:20px;
-    padding:15px;
-    border-radius:10px;
-    background:#f1f5fb;
-    display:none;
-}
-</style>
+        .btn-track {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-track:hover { transform: translateY(-2px); background: #083d7e; }
+
+        /* Timeline / Result Styling */
+        .result-box {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px dashed #e2e8f0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .service-info {
+            background: var(--primary-light);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            text-align: left;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -21px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            z-index: 2;
+        }
+
+        .timeline-item::after {
+            content: "";
+            position: absolute;
+            left: -16px;
+            top: 20px;
+            width: 2px;
+            height: 100%;
+            background: #e2e8f0;
+        }
+
+        .timeline-item:last-child::after { display: none; }
+
+        .timeline-item.active::before { background: var(--success); box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.2); }
+        .timeline-item.active h4 { color: var(--success); }
+
+        .timeline-item h4 { font-size: 15px; margin-bottom: 4px; color: var(--text-light); }
+        .timeline-item p { font-size: 13px; color: #94a3b8; }
+
+        .error-text { color: #ef4444; font-size: 14px; margin-top: 15px; display: none; }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
-<h2>Track Your Application</h2>
+<div class="track-card">
+    <div class="header-area">
+        <i class="fas fa-satellite-dish"></i>
+        <h2>Track Application</h2>
+        <p style="color: var(--text-light); font-size: 14px; margin-top: 5px;">Real-time status of your documents</p>
+    </div>
 
-<input type="text" id="appId" placeholder="Enter Application ID">
-<input type="text" id="mobile" placeholder="Enter Mobile Number">
+    <div class="input-group">
+        <label>Application ID</label>
+        <input type="text" id="appId" placeholder="e.g. KS-998234">
+    </div>
 
-<button onclick="trackApplication()">Check Status</button>
+    <div class="input-group">
+        <label>Registered Mobile</label>
+        <input type="tel" id="mobile" placeholder="Enter 10-digit number">
+    </div>
 
-<div class="result" id="resultBox">
-    <h3>Status:</h3>
-    <p id="statusText"></p>
-</div>
+    <button class="btn-track" id="trackBtn" onclick="trackApplication()">
+        <i class="fas fa-magnifying-glass"></i> <span>Check Status</span>
+    </button>
 
+    <div id="errorMsg" class="error-text">
+        <i class="fas fa-circle-exclamation"></i> No record found for these details.
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <div class="service-info">
+            <i class="fas fa-file-signature"></i> <span id="serviceName"></span>
+        </div>
+
+        <div class="timeline" id="timelineContainer">
+            </div>
+    </div>
 </div>
 
 <script src="config.js"></script>
 <script>
-function trackApplication(){
+    function trackApplication() {
+        const appId = document.getElementById('appId').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const btn = document.getElementById('trackBtn');
+        const resultBox = document.getElementById('resultBox');
+        const errorMsg = document.getElementById('errorMsg');
 
-    const appId = document.getElementById('appId').value;
-    const mobile = document.getElementById('mobile').value;
+        if (!appId || !mobile) {
+            alert("Please provide both ID and Mobile number.");
+            return;
+        }
 
-    if(!appId || !mobile){
-        alert("Enter Application ID and Mobile Number");
-        return;
+        // UI Loading State
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Searching...`;
+        errorMsg.style.display = 'none';
+        resultBox.style.display = 'none';
+
+        fetch(`${API_BASE}/api/track`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ application_id: appId, mobile: mobile })
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fas fa-magnifying-glass"></i> Check Status`;
+
+            if (data.success) {
+                renderTimeline(data);
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fas fa-magnifying-glass"></i> Check Status`;
+            alert("Network error. Please try again later.");
+        });
     }
 
-    // Updated to use API_BASE from config.js
-    fetch(`${API_BASE}/api/track`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({application_id:appId, mobile:mobile})
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        if(data.success){
-            document.getElementById('resultBox').style.display='block';
-            document.getElementById('statusText').innerText =
-                "Service: " + data.service + " | Status: " + data.status;
-        }else{
-            alert("Application not found");
-        }
-    });
+    function renderTimeline(data) {
+        const resultBox = document.getElementById('resultBox');
+        const serviceName = document.getElementById('serviceName');
+        const timelineContainer = document.getElementById('timelineContainer');
+        
+        serviceName.innerText = "Service: " + data.service;
+        resultBox.style.display = 'block';
 
-}
+        // Define the stages
+        const stages = [
+            { key: 'Submitted', label: 'Application Received', desc: 'We have received your request.' },
+            { key: 'Verified', label: 'Document Verification', desc: 'Our agents are verifying your data.' },
+            { key: 'Processing', label: 'Department Review', desc: 'Sent to Government Department.' },
+            { key: 'Completed', label: 'Issued / Dispatched', desc: 'Your document is ready.' }
+        ];
+
+        let html = '';
+        let currentStatusFound = false;
+
+        stages.forEach(stage => {
+            // Logic to mark stages as active based on API status
+            const isActive = data.status.toLowerCase() === stage.key.toLowerCase();
+            const isCompleted = !isActive && !currentStatusFound; 
+            
+            // Simple logic: once we find the current status, the following stages stay grey
+            if (isActive) currentStatusFound = true;
+
+            html += `
+                <div class="timeline-item ${isActive || isCompleted ? 'active' : ''}">
+                    <h4>${stage.label}</h4>
+                    <p>${isActive ? 'Current Stage: ' + stage.desc : stage.desc}</p>
+                </div>
+            `;
+        });
+
+        timelineContainer.innerHTML = html;
+    }
 </script>
 
 </body>
