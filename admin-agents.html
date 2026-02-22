@@ -84,12 +84,12 @@
 <script>
     async function loadDashboard() {
         try {
-            // Load Pending using authFetch
+            // Correctly using authFetch
             const resPending = await authFetch("/api/admin/pending-agents");
             const pendingData = await resPending.json();
             renderTable("pending-list", pendingData, true);
 
-            // Load Active using authFetch
+            // Correctly using authFetch
             const resActive = await authFetch("/api/admin/active-agents");
             const activeData = await resActive.json();
             renderTable("active-list", activeData, false);
@@ -136,7 +136,7 @@
         if(!confirm(confirmMsg)) return;
 
         try {
-            // Updated to authFetch with POST method
+            // Correctly using authFetch with POST method
             const res = await authFetch(endpoint, { method: "POST" });
             const result = await res.json();
             
@@ -151,7 +151,6 @@
         }
     }
 
-    // Initial Load
     loadDashboard();
 </script>
 </body>
