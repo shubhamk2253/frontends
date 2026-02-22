@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard | My Applications</title>
@@ -118,21 +121,20 @@
     <div id="applications"></div>
 </div>
 
-<script src="../config.js"></script>
 <script>
-    // Security Check
-    if(!localStorage.getItem("token")){
-        window.location.href="../login.html";
-    }
+    // 1. Mandatory Role Check (must be first)
+    requireRole("customer");
 
+    // 2. Fetch Logic
     async function loadApps(){
         const container = document.getElementById("applications");
         const loader = document.getElementById("loader");
 
         try {
+            // Using API_BASE from config.js and access_token from localStorage
             const res = await fetch(API_BASE + "/api/customer/applications", {
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token")
+                    "Authorization": "Bearer " + localStorage.getItem("access_token")
                 }
             });
 
@@ -148,7 +150,6 @@
             }
 
             data.forEach(app => {
-                // Determine CSS class for status
                 const statusClass = app.status.toLowerCase().includes('pending') ? 'status-pending' : 
                                     app.status.toLowerCase().includes('completed') ? 'status-completed' : 'status-rejected';
 
