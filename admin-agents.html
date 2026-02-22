@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>KaagazSeva — System Core Management</title>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+
     <style>
         :root {
             --primary: #0a4fa3;
@@ -78,26 +81,16 @@
     </div>
 </div>
 
-<script src="config.js"></script>
 <script>
-    // SECURITY CHECK: Redirect if no token
-    const token = localStorage.getItem("token");
-    if(!token) window.location.href = "login.html";
-
-    const headers = {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-    };
-
     async function loadDashboard() {
         try {
-            // Load Pending
-            const resPending = await fetch(`${API_BASE}/api/admin/pending-agents`, { headers });
+            // Load Pending using authFetch
+            const resPending = await authFetch("/api/admin/pending-agents");
             const pendingData = await resPending.json();
             renderTable("pending-list", pendingData, true);
 
-            // Load Active
-            const resActive = await fetch(`${API_BASE}/api/admin/active-agents`, { headers });
+            // Load Active using authFetch
+            const resActive = await authFetch("/api/admin/active-agents");
             const activeData = await resActive.json();
             renderTable("active-list", activeData, false);
         } catch (err) {
@@ -109,7 +102,7 @@
         const container = document.getElementById(elementId);
         container.innerHTML = "";
 
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             container.innerHTML = `<tr><td colspan="5" class="empty-state">No records found</td></tr>`;
             return;
         }
@@ -143,10 +136,8 @@
         if(!confirm(confirmMsg)) return;
 
         try {
-            const res = await fetch(`${API_BASE}${endpoint}`, { 
-                method: "POST", 
-                headers 
-            });
+            // Updated to authFetch with POST method
+            const res = await authFetch(endpoint, { method: "POST" });
             const result = await res.json();
             
             if(res.ok) {
