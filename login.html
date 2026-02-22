@@ -3,90 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - KaagazSeva</title>
+    <title>Gateway - KaagazSeva</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root {
+            --primary: #0a4fa3;
+            --accent: #ffcc00;
+            --dark: #0f172a;
+            --bg: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
 
         body {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(120deg, #eef3fb, #f7f9fc);
+            background: radial-gradient(circle at center, #ffffff 0%, #e2e8f0 100%);
         }
 
         .container {
             background: white;
-            padding: 45px;
-            border-radius: 18px;
-            width: 380px;
+            padding: 40px;
+            border-radius: 24px;
+            width: 400px;
             text-align: center;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo-area {
+            margin-bottom: 30px;
+        }
+
+        .logo-area i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
         }
 
         h2 {
-            color: #0a4fa3;
-            margin-bottom: 25px;
+            color: var(--dark);
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 10px;
         }
 
-        button {
+        p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .login-card {
+            display: flex;
+            align-items: center;
             width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            background: white;
         }
 
-        .customer { background: #0a4fa3; color: white; }
-        .agent { background: #ffcc00; }
-        .admin { background: #222; color: white; }
+        .login-card:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+            transform: translateY(-2px);
+        }
 
-        button:hover { opacity: 0.9; }
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .cust-icon { background: #eef4ff; color: var(--primary); }
+        .agent-icon { background: #fffbeb; color: #b45309; }
+        .founder-icon { background: #f1f5f9; color: var(--dark); }
+
+        .card-text { text-align: left; }
+        .card-text b { display: block; color: var(--dark); font-size: 16px; }
+        .card-text span { font-size: 12px; color: #94a3b8; }
+
+        .footer-note {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
-        <h2>Select Login Type</h2>
+        <div class="logo-area">
+            <i class="fas fa-shield-halved"></i>
+            <h2>Secure Gateway</h2>
+            <p>Select your identity to continue to the terminal</p>
+        </div>
 
-        <button class="customer" onclick="handleLogin('customer')">Customer Login</button>
-        <button class="agent" onclick="handleLogin('agent')">Agent Login</button>
-        <button class="admin" onclick="handleLogin('founder')">Founder Login</button>
+        <a href="customer/login.html" class="login-card">
+            <div class="icon-box cust-icon"><i class="fas fa-user"></i></div>
+            <div class="card-text">
+                <b>Customer Portal</b>
+                <span>Apply & Track Documents</span>
+            </div>
+        </a>
+
+        <a href="agent/login.html" class="login-card">
+            <div class="icon-box agent-icon"><i class="fas fa-user-tie"></i></div>
+            <div class="card-text">
+                <b>Agent Terminal</b>
+                <span>Manage Client Requests</span>
+            </div>
+        </a>
+
+        <a href="founder/login.html" class="login-card">
+            <div class="icon-box founder-icon"><i class="fas fa-microchip"></i></div>
+            <div class="card-text">
+                <b>System Core</b>
+                <span>Platform Governance</span>
+            </div>
+        </a>
+
+        <div class="footer-note">
+            AES-256 Encrypted Session
+        </div>
     </div>
 
     <script src="js/config.js"></script>
-
     <script>
-        // This function simulates the verification success block you provided
-        async function handleLogin(roleType) {
-            // This is where your fetch/API call happens. 
-            // Below is the specific verify success block you requested:
-            
-            /* Assuming 'res' and 'data' come from your API response 
-               after the user enters credentials.
-            */
-            
-            // Example of your requested logic:
-            if(res.ok && data.access_token){
+        /**
+         * Standardized Login Response Handler
+         * Used inside your specific login pages (customer/login.html, etc.)
+         */
+        function finalizeLogin(data) {
+            if(data.token) { // Changed 'access_token' to 'token' to match authFetch
                 localStorage.clear();
-                localStorage.setItem("access_token", data.access_token);
+                
+                // Essential for authFetch logic
+                localStorage.setItem("token", data.token); 
                 localStorage.setItem("role", data.role);
+                localStorage.setItem("name", data.name || "User");
 
-                if(data.role === "customer"){
-                    window.location.href = "/customer/dashboard.html";
-                } else if(data.role === "agent"){
-                    window.location.href = "/agent/dashboard.html";
-                } else if(data.role === "founder"){
-                    window.location.href = "/founder/control-tower.html";
-                }
+                // Route based on role
+                const routes = {
+                    "customer": "/customer/dashboard.html",
+                    "agent": "/agent/dashboard.html",
+                    "founder": "/founder/control-tower.html",
+                    "admin": "/admin/dashboard.html"
+                };
+
+                window.location.href = routes[data.role] || "/index.html";
             }
         }
     </script>
-
 </body>
 </html>
