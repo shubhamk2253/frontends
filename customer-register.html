@@ -6,6 +6,9 @@
     <title>Customer Enrollment | KaagazSeva India</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    
     <style>
         :root {
             --primary: #0a4fa3;
@@ -16,12 +19,12 @@
             --text-heading: #0f172a;
             --text-body: #475569;
             --success: #10b981;
+            --white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-canvas); color: var(--text-body); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
 
-        /* Main Enrollment Card */
         .enrollment-card {
             background: var(--white);
             width: 100%;
@@ -37,7 +40,6 @@
         h1 { color: var(--text-heading); font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 8px; letter-spacing: -1px; }
         .subtitle { text-align: center; margin-bottom: 40px; font-size: 15px; }
 
-        /* Form Styling */
         .form-group { margin-bottom: 24px; }
         label { display: block; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; color: var(--text-heading); }
         
@@ -74,7 +76,6 @@
 
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(10, 79, 163, 0.2); }
 
-        /* --- INFO DRAWER (The "Security Confirmation" Stage) --- */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px);
@@ -95,7 +96,6 @@
 
         .hidden { display: none; }
         .error-toast { color: #e11d48; font-size: 13px; font-weight: 600; margin-top: 10px; text-align: center; }
-
     </style>
 </head>
 <body>
@@ -121,34 +121,9 @@
             <select id="state" required>
                 <option value="">Select your state</option>
                 <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
                 <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
                 <option value="West Bengal">West Bengal</option>
-            </select>
+                </select>
         </div>
 
         <button type="button" class="btn-primary" onclick="openReview()">Continue to Review</button>
@@ -180,7 +155,6 @@
     <button onclick="closeDrawer()" style="width: 100%; background: none; border: none; margin-top: 15px; color: var(--text-body); cursor: pointer;">Edit Information</button>
 </div>
 
-<script src="config.js"></script>
 <script>
     const drawer = document.getElementById('drawer');
     const overlay = document.getElementById('overlay');
@@ -216,9 +190,9 @@
         btn.innerText = "Securing Connection...";
 
         try {
-            const res = await fetch(`${API_BASE}/api/send-otp`, {
+            // Updated to authFetch
+            const res = await authFetch("/api/send-otp", {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ mobile })
             });
 
@@ -245,9 +219,9 @@
         finalBtn.innerText = "Authenticating...";
 
         try {
-            const res = await fetch(`${API_BASE}/api/verify-otp`, {
+            // Updated to authFetch
+            const res = await authFetch("/api/verify-otp", {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ mobile, otp })
             });
             const data = await res.json();
