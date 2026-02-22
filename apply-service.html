@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply Service - KaagazSeva</title>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+
     <style>
         *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body{ background:linear-gradient(120deg,#eef3fb,#f7f9fc); min-height:100vh; display:flex; justify-content:center; align-items:center; }
@@ -56,14 +59,8 @@
     </form>
 </div>
 
-<script src="config.js"></script>
 <script>
-    /* 🔐 PART 1 — Check login before anything loads */
-    if (!localStorage.getItem("token")) {
-        window.location.href = "login.html";
-    }
-
-    /* 📝 PART 2 — Handle Form Submission */
+    // PART 1 — Form Submission
     document.getElementById("applyForm").addEventListener("submit", async function(e) {
         e.preventDefault();
         
@@ -72,16 +69,13 @@
         btn.innerText = "Processing...";
 
         const formData = new FormData(this);
-        const token = localStorage.getItem("token"); // Retrieve the JWT token
 
         try {
-            // 1. Submit application with Authorization Header
-            const res = await fetch(`${API_BASE}/api/apply-service`, {
+            // 1. Submit application using authFetch
+            const res = await authFetch("/api/apply-service", {
                 method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}` // Required by your Flask @jwt_required() route
-                },
                 body: formData
+                // Note: authFetch handles the Authorization header and API_BASE automatically
             });
 
             const data = await res.json();
@@ -92,9 +86,9 @@
 
             const appId = data.application_id;
 
-            // 2. Fetch service price dynamically
+            // 2. Fetch service price dynamically using authFetch
             const serviceName = document.getElementById("service").value;
-            const priceRes = await fetch(`${API_BASE}/api/service-price?service=${encodeURIComponent(serviceName)}`);
+            const priceRes = await authFetch(`/api/service-price?service=${encodeURIComponent(serviceName)}`);
             const priceData = await priceRes.json();
 
             const amount = priceData.price || 500;
