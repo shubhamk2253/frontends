@@ -4,230 +4,248 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KaagazSeva – India’s Premier Document Service Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary: #0a4fa3;
+            --primary-glow: rgba(10, 79, 163, 0.15);
             --primary-dark: #083d7e;
             --accent: #ffcc00;
-            --text-main: #1a202c;
-            --text-light: #4a5568;
-            --bg-light: #f7fafc;
+            --text-main: #0f172a;
+            --text-light: #64748b;
+            --bg-light: #f8fafc;
             --white: #ffffff;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
             --founder-neon: #00ffcc;
+            --drawer-width: 400px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: var(--bg-light); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
 
-        /* --- Header & Navigation --- */
+        /* --- Professional Header --- */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0 40px;
-            height: 80px;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 0 5%;
+            height: 90px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
             color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
         }
 
         .nav-right { display: flex; align-items: center; gap: 20px; }
 
-        .nav-links { display: flex; gap: 25px; margin-right: 15px; }
+        .nav-links { display: flex; gap: 30px; margin-right: 20px; }
         .nav-links a {
             color: var(--text-light);
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 15px;
+            transition: 0.3s;
         }
-        .nav-links a:hover { color: var(--primary); transform: translateY(-1px); }
+        .nav-links a:hover { color: var(--primary); }
 
         /* --- Founder Secure Button --- */
         .founder-access-btn {
-            background: #1a202c;
+            background: #0f172a;
             color: var(--founder-neon);
-            border: 1px solid var(--founder-neon);
-            padding: 10px 18px;
-            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            padding: 10px 20px;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             cursor: pointer;
-            display: none; /* Hidden unless triggered */
+            display: none;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
         }
         .founder-access-btn:hover {
-            background: var(--founder-neon);
-            color: #1a202c;
-            box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
+            border-color: var(--founder-neon);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: translateY(-2px);
         }
-        .pulse {
-            width: 8px;
-            height: 8px;
-            background: var(--founder-neon);
-            border-radius: 50%;
-            animation: pulse-gfx 1.5s infinite;
-        }
-        @keyframes pulse-gfx {
-            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(0, 255, 204, 0); }
-            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+
+        .pulse-dot {
+            width: 8px; height: 8px; background: var(--founder-neon);
+            border-radius: 50%; box-shadow: 0 0 10px var(--founder-neon);
         }
 
         .menu-btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
+            padding: 14px 28px;
+            border-radius: 14px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 12px;
+            transition: 0.3s;
+            box-shadow: 0 8px 20px var(--primary-glow);
         }
-        .menu-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+        .menu-btn:hover { background: var(--primary-dark); transform: scale(1.02); }
 
-        /* --- Side Drawer --- */
+        /* --- Enterprise Side Drawer --- */
         .drawer-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(6px);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
             visibility: hidden; opacity: 0;
             transition: 0.4s; z-index: 2000;
         }
         .drawer {
             position: fixed;
-            top: 0; right: -380px; width: 380px; height: 100%;
+            top: 0; right: calc(-1 * var(--drawer-width)); 
+            width: var(--drawer-width); height: 100%;
             background: var(--white);
             z-index: 2001;
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 50px 40px;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            padding: 0;
             display: flex;
             flex-direction: column;
-            box-shadow: -20px 0 50px rgba(0,0,0,0.15);
+            box-shadow: -20px 0 60px rgba(0,0,0,0.1);
         }
         .drawer.active { right: 0; }
         .drawer-overlay.active { visibility: visible; opacity: 1; }
 
-        .drawer-section { margin-bottom: 35px; }
-        .drawer-section label {
-            display: block; font-size: 12px; text-transform: uppercase;
-            letter-spacing: 2px; color: #a0aec0; font-weight: 800; margin-bottom: 20px;
+        .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
         }
-        .drawer-link {
-            display: block; padding: 15px 0; color: var(--text-main);
-            text-decoration: none; font-weight: 600; border-bottom: 1px solid #f1f5f9;
-            transition: 0.3s;
-        }
-        .drawer-link:hover { color: var(--primary); padding-left: 12px; background: #f8fafc; }
 
-        /* --- Hero Section --- */
-        .hero {
-            background: linear-gradient(135deg, #0a4fa3 0%, #0f6ad6 100%);
-            color: var(--white);
-            padding: 160px 20px;
-            text-align: center;
-            clip-path: ellipse(160% 100% at 50% 0%);
+        .user-profile-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border: 1px solid rgba(10, 79, 163, 0.1);
+            padding: 24px;
+            border-radius: 20px;
+            margin-bottom: 40px;
         }
-        .hero h1 { font-size: 64px; font-weight: 800; margin-bottom: 25px; letter-spacing: -2.5px; line-height: 1.1; }
-        .hero p { font-size: 22px; opacity: 0.9; max-width: 750px; margin: 0 auto 50px; font-weight: 300; }
-        
+
+        .drawer-section { margin-bottom: 40px; }
+        .drawer-section h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .drawer-section h4::after {
+            content: ""; flex: 1; height: 1px; background: #e2e8f0;
+        }
+
+        .drawer-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: 0.2s;
+            margin-bottom: 5px;
+        }
+        .drawer-link i { font-size: 18px; color: var(--text-light); width: 24px; text-align: center; }
+        .drawer-link:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+            padding-left: 22px;
+        }
+        .drawer-link:hover i { color: var(--primary); }
+
+        .logout-btn {
+            margin-top: 20px;
+            color: #ef4444 !important;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* --- Hero & Sections --- */
+        .hero {
+            background: radial-gradient(circle at top right, #1e40af, #0a4fa3);
+            color: var(--white);
+            padding: 180px 5%;
+            text-align: center;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+        .hero h1 { font-size: 72px; font-weight: 800; margin-bottom: 30px; letter-spacing: -3px; line-height: 1; }
+        .hero p { font-size: 24px; opacity: 0.85; max-width: 800px; margin: 0 auto 50px; font-weight: 400; }
+
         .cta-btn {
             background: var(--accent);
-            color: var(--primary-dark);
-            padding: 22px 50px;
+            color: #4a3b00;
+            padding: 24px 60px;
             border: none;
-            border-radius: 16px;
-            font-size: 19px;
+            border-radius: 20px;
+            font-size: 20px;
             font-weight: 800;
             cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.4);
+            transition: 0.4s;
+            box-shadow: 0 15px 40px rgba(255, 204, 0, 0.3);
         }
-        .cta-btn:hover { transform: translateY(-6px); box-shadow: 0 15px 40px rgba(255, 204, 0, 0.5); }
+        .cta-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(255, 204, 0, 0.4); }
 
-        /* --- Features/Services --- */
-        .section { padding: 120px 40px; max-width: 1300px; margin: 0 auto; text-align: center; }
-        .section h2 { font-size: 42px; font-weight: 800; margin-bottom: 70px; color: var(--primary-dark); letter-spacing: -1px; }
-        
-        .cards {
+        /* --- Service Cards --- */
+        .section { padding: 120px 5%; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: 48px; font-weight: 800; color: #0f172a; letter-spacing: -1.5px; }
+
+        .grid-services {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
-        .card {
+        .service-card {
             background: var(--white);
-            padding: 50px 40px;
-            border-radius: 28px;
-            text-align: left;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0,0,0,0.03);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            cursor: default;
+            padding: 45px;
+            border-radius: 30px;
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: 0.4s;
         }
-        .card:hover { transform: translateY(-15px); box-shadow: var(--shadow); border-color: var(--primary); }
-        .card .icon-box { 
-            width: 60px; height: 60px; background: #eef4ff; border-radius: 18px; 
-            display: flex; align-items: center; justify-content: center; color: var(--primary);
-            margin-bottom: 30px; font-size: 28px;
+        .service-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .icon-circle {
+            width: 70px; height: 70px; background: #eff6ff; border-radius: 22px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; margin-bottom: 30px;
         }
-        .card h3 { color: var(--primary-dark); margin-bottom: 15px; font-size: 24px; font-weight: 700; }
-        .card p { color: var(--text-light); font-size: 16px; line-height: 1.8; }
-
-        footer {
-            background: #0f172a;
-            color: #94a3b8;
-            padding: 80px 40px;
-            text-align: left;
-            font-size: 15px;
-        }
-        .footer-grid {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 50px;
-        }
-        .footer-link {
-            color: #94a3b8;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 12px;
-            transition: 0.3s;
-        }
-        .footer-link:hover { color: var(--white); }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero h1 { font-size: 42px; letter-spacing: -1px; }
+            .hero h1 { font-size: 48px; }
             header { padding: 0 20px; }
             .drawer { width: 100%; right: -100%; }
-            .footer-grid { grid-template-columns: 1fr; text-align: center; }
         }
     </style>
 </head>
@@ -236,117 +254,122 @@
 
 <header>
     <a href="index.html" class="logo">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="var(--primary)">
-            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-        </svg>
+        <div style="background:var(--primary); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+            <i class="fas fa-file-invoice" style="color:white; font-size:20px;"></i>
+        </div>
         KaagazSeva
     </a>
 
     <div class="nav-right">
-        <button id="founderBtn" class="founder-access-btn" onclick="location.href='founder-login.html'">
-            <div class="pulse"></div>
+        <button id="founderBtn" class="founder-access-btn" onclick="location.href='founder/login.html'">
+            <div class="pulse-dot"></div>
             System Core
         </button>
 
         <nav class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="apply-service.html">Services</a>
-            <a href="track.html">Track Status</a>
+            <a href="apply-service.html">Solutions</a>
+            <a href="track.html">Track</a>
+            <a href="support.html">Support</a>
         </nav>
 
         <button class="menu-btn" onclick="toggleDrawer()">
-            <span>Explore</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <i class="fas fa-grid-2"></i>
+            <span>Command Center</span>
         </button>
     </div>
 </header>
 
 <div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
-    <div class="drawer-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-        <h2 style="color: var(--primary); font-weight:800; font-size: 28px;">Menu</h2>
-        <button onclick="toggleDrawer()" style="background:none; border:none; font-size:40px; cursor:pointer; color:#94a3b8; line-height: 1;">&times;</button>
-    </div>
-
-    <div class="drawer-section">
-        <label>Portal Access</label>
-        <div id="auth-links">
-            <a href="customer-login.html" class="drawer-link">Customer Login</a>
-            <a href="agent-login.html" class="drawer-link">Agent Login</a>
-            <a href="admin-login.html" class="drawer-link">Staff Portal</a>
+    <div class="drawer-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+            <h2 style="font-weight:800; font-size: 24px;">Command Center</h2>
+            <button onclick="toggleDrawer()" style="background:#f1f5f9; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer;"><i class="fas fa-times"></i></button>
         </div>
-    </div>
 
-    <div class="drawer-section">
-        <label>Join the Network</label>
-        <a href="customer-register.html" class="drawer-link">Create Account</a>
-        <a href="agent-register.html" class="drawer-link">Apply as Agent</a>
-    </div>
+        <div id="auth-ui">
+            <div id="guest-view">
+                <div class="user-profile-card" style="text-align:center;">
+                    <i class="fas fa-user-circle" style="font-size:50px; color:#cbd5e1; margin-bottom:15px; display:block;"></i>
+                    <p style="font-weight:700; color:var(--text-main);">Welcome, Guest</p>
+                    <p style="font-size:13px; color:var(--text-light);">Log in to manage your documents</p>
+                </div>
+                
+                <div class="drawer-section">
+                    <h4>Member Access</h4>
+                    <a href="customer/login.html" class="drawer-link"><i class="fas fa-user"></i> Customer Portal</a>
+                    <a href="agent/login.html" class="drawer-link"><i class="fas fa-user-tie"></i> Agent Terminal</a>
+                    <a href="admin/login.html" class="drawer-link"><i class="fas fa-shield-halved"></i> Staff Access</a>
+                </div>
 
-    <div class="drawer-section" style="margin-top:auto;">
-        <label>Help & Legal</label>
-        <a href="support.html" class="drawer-link">Support Desk</a>
-        <a href="terms.html" class="drawer-link">Terms of Service</a>
-        <a href="privacy.html" class="drawer-link">Privacy Policy</a>
-        <a href="refund.html" class="drawer-link">Refund Policy</a>
+                <div class="drawer-section">
+                    <h4>Join Network</h4>
+                    <a href="customer/register.html" class="drawer-link"><i class="fas fa-user-plus"></i> Create Account</a>
+                    <a href="agent/register.html" class="drawer-link"><i class="fas fa-handshake"></i> Become an Agent</a>
+                </div>
+            </div>
+
+            <div id="logged-in-view" style="display:none;">
+                <div class="user-profile-card">
+                    <p style="font-size:11px; font-weight:800; color:var(--primary); letter-spacing: 1.5px; margin-bottom:5px;">SESSION ACTIVE</p>
+                    <p id="user-name" style="font-weight:800; color:var(--text-main); font-size: 20px;"></p>
+                    <p id="user-role-badge" style="display:inline-block; padding:4px 12px; background:var(--primary); color:white; font-size:10px; border-radius:6px; margin-top:10px; font-weight:700; text-transform:uppercase;"></p>
+                </div>
+
+                <div class="drawer-section">
+                    <h4>Dashboard</h4>
+                    <div id="dashboard-links">
+                        </div>
+                </div>
+                
+                <div class="drawer-section">
+                    <h4>Management</h4>
+                    <a href="track.html" class="drawer-link"><i class="fas fa-search-location"></i> Track Applications</a>
+                    <a href="support.html" class="drawer-link"><i class="fas fa-headset"></i> Get Assistance</a>
+                    <a href="#" class="drawer-link logout-btn" onclick="logout()"><i class="fas fa-power-off"></i> Secure Sign Out</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="drawer-section" style="margin-top:40px;">
+            <h4>Governance</h4>
+            <a href="legal/terms.html" class="drawer-link"><i class="fas fa-scale-balanced"></i> Terms</a>
+            <a href="legal/privacy.html" class="drawer-link"><i class="fas fa-fingerprint"></i> Privacy</a>
+        </div>
     </div>
 </div>
 
+
+
 <section class="hero">
     <h1>India’s Digital Document Gateway</h1>
-    <p>We bridge the gap between citizens and government services through a verified network of expert agents.</p>
-    <button class="cta-btn" onclick="location.href='apply-service.html'">Start Application Now</button>
+    <p>Bridging the gap between citizens and complex government protocols through a verified network of expert agents.</p>
+    <button class="cta-btn" onclick="location.href='apply-service.html'">Start Your Application</button>
 </section>
 
 <section class="section">
-    <h2>Premier Solutions</h2>
-    <div class="cards">
-        <div class="card">
-            <div class="icon-box">💳</div>
-            <h3>PAN Identity</h3>
-            <p>New registration, duplicate issuance, and data correction with automated tracking.</p>
+    <div class="section-header">
+        <h2>Premium Services</h2>
+    </div>
+    <div class="grid-services">
+        <div class="service-card">
+            <div class="icon-circle"><i class="fas fa-address-card" style="color:#2563eb"></i></div>
+            <h3>PAN Registry</h3>
+            <p>End-to-end processing for new PAN cards, corrections, and duplicate re-issuance.</p>
         </div>
-        <div class="card">
-            <div class="icon-box">📜</div>
-            <h3>State Revenue</h3>
-            <p>Digital processing for Income, Caste, and Domicile certificates across all states.</p>
+        <div class="service-card">
+            <div class="icon-circle"><i class="fas fa-landmark" style="color:#059669"></i></div>
+            <h3>Revenue Services</h3>
+            <p>Caste, Domicile, and Income certificates via streamlined digital workflows.</p>
         </div>
-        <div class="card">
-            <div class="icon-box">🛂</div>
+        <div class="service-card">
+            <div class="icon-circle"><i class="fas fa-passport" style="color:#7c3aed"></i></div>
             <h3>Passport Seva</h3>
-            <p>Full appointment management and documentation for fresh and renewal passports.</p>
-        </div>
-        <div class="card">
-            <div class="icon-box">⚖️</div>
-            <h3>Legal & Tax</h3>
-            <p>GST, ITR Filing, and Udyam registrations for small businesses and individuals.</p>
+            <p>Appointment logistics and pre-verification of documentation for international travel.</p>
         </div>
     </div>
 </section>
 
-<footer>
-    <div class="footer-grid">
-        <div>
-            <strong style="color:white; font-size:20px; letter-spacing: -0.5px; display: block; margin-bottom: 15px;">KaagazSeva India</strong>
-            <p style="margin-bottom: 20px;">Empowering the nation through transparent and accessible documentation services. Your trusted partner for government applications.</p>
-            <p>© 2026 KaagazSeva. All rights reserved.</p>
-        </div>
-        <div>
-            <label style="color:white; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:20px;">Quick Links</label>
-            <a href="apply-service.html" class="footer-link">Our Services</a>
-            <a href="track.html" class="footer-link">Track Application</a>
-            <a href="support.html" class="footer-link">Help Center</a>
-        </div>
-        <div>
-            <label style="color:white; font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:20px;">Legal</label>
-            <a href="terms.html" class="footer-link">Terms & Conditions</a>
-            <a href="privacy.html" class="footer-link">Privacy Policy</a>
-            <a href="refund.html" class="footer-link">Refund Policy</a>
-        </div>
-    </div>
-</footer>
-
-<script src="config.js"></script>
 <script>
     function toggleDrawer() {
         document.getElementById('drawer').classList.toggle('active');
@@ -356,27 +379,52 @@
     window.onload = () => {
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("role");
+        const name = localStorage.getItem("name") || "User";
         const urlParams = new URLSearchParams(window.location.search);
-        const founderBtn = document.getElementById('founderBtn');
-
+        
+        // Show System Core if Founder or via URL secret
         if(role === 'founder' || urlParams.has('root')) {
-            founderBtn.style.display = 'flex';
+            document.getElementById('founderBtn').style.display = 'flex';
         }
 
         if(token) {
-            document.getElementById('auth-links').innerHTML = `
-                <div style="padding:20px; background:#f1f5f9; border-radius:16px; margin-bottom:20px; border: 1px solid rgba(10, 79, 163, 0.1);">
-                    <p style="font-size:11px; font-weight:800; color:var(--primary); letter-spacing: 1px;">AUTHORIZED SESSION</p>
-                    <p style="font-weight:700; color:var(--text-main); font-size: 18px;">${role ? role.toUpperCase() : 'USER'}</p>
-                </div>
-                <a href="dashboard.html" class="drawer-link">Access Dashboard</a>
-                <a href="#" class="drawer-link" onclick="logout()" style="color: #ef4444; font-weight: 700;">Secure Logout</a>
-            `;
+            document.getElementById('guest-view').style.display = 'none';
+            document.getElementById('logged-in-view').style.display = 'block';
+            document.getElementById('user-name').innerText = name;
+            document.getElementById('user-role-badge').innerText = role;
+
+            const dashContainer = document.getElementById('dashboard-links');
+            let links = '';
+
+            // Dynamic Dashboard Routing
+            if(role === 'founder') {
+                links = `
+                    <a href="founder/control-tower.html" class="drawer-link"><i class="fas fa-tower-broadcast"></i> Control Tower</a>
+                    <a href="founder/admin-management.html" class="drawer-link"><i class="fas fa-users-gear"></i> Admin Management</a>
+                    <a href="founder/revenue.html" class="drawer-link"><i class="fas fa-vault"></i> Platform Revenue</a>
+                `;
+            } else if(role === 'admin') {
+                links = `
+                    <a href="admin/dashboard.html" class="drawer-link"><i class="fas fa-gauge-high"></i> Admin Console</a>
+                    <a href="admin/approvals.html" class="drawer-link"><i class="fas fa-check-double"></i> Pending Approvals</a>
+                `;
+            } else if(role === 'agent') {
+                links = `
+                    <a href="agent/dashboard.html" class="drawer-link"><i class="fas fa-briefcase"></i> Agent Terminal</a>
+                    <a href="agent/wallet.html" class="drawer-link"><i class="fas fa-wallet"></i> Earnings & Payouts</a>
+                `;
+            } else {
+                links = `
+                    <a href="customer/dashboard.html" class="drawer-link"><i class="fas fa-folder-open"></i> My Applications</a>
+                    <a href="customer/profile.html" class="drawer-link"><i class="fas fa-id-card"></i> Profile Settings</a>
+                `;
+            }
+            dashContainer.innerHTML = links;
         }
     }
 
     function logout() {
-        if(confirm("Confirm secure logout?")) {
+        if(confirm("Confirm secure logout? Session will be terminated.")) {
             localStorage.clear();
             window.location.href = "index.html";
         }
