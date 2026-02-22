@@ -1,78 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - KaagazSeva</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - KaagazSeva</title>
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(120deg,#eef3fb,#f7f9fc);
-}
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(120deg, #eef3fb, #f7f9fc);
+        }
 
-.container{
-    background:white;
-    padding:45px;
-    border-radius:18px;
-    width:380px;
-    text-align:center;
-    box-shadow:0 12px 35px rgba(0,0,0,0.08);
-}
+        .container {
+            background: white;
+            padding: 45px;
+            border-radius: 18px;
+            width: 380px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+        }
 
-h2{
-    color:#0a4fa3;
-    margin-bottom:25px;
-}
+        h2 {
+            color: #0a4fa3;
+            margin-bottom: 25px;
+        }
 
-button{
-    width:100%;
-    padding:14px;
-    margin:10px 0;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
+        button {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-.customer{background:#0a4fa3;color:white;}
-.agent{background:#ffcc00;}
-.admin{background:#222;color:white;}
+        .customer { background: #0a4fa3; color: white; }
+        .agent { background: #ffcc00; }
+        .admin { background: #222; color: white; }
 
-button:hover{opacity:0.9;}
-</style>
+        button:hover { opacity: 0.9; }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
-<h2>Select Login Type</h2>
+    <div class="container">
+        <h2>Select Login Type</h2>
 
-<button class="customer" onclick="go('customer')">Customer Login</button>
-<button class="agent" onclick="go('agent')">Agent Login</button>
-<button class="admin" onclick="go('admin')">Admin Login</button>
-</div>
-<script src="config.js"></script>
+        <button class="customer" onclick="handleLogin('customer')">Customer Login</button>
+        <button class="agent" onclick="handleLogin('agent')">Agent Login</button>
+        <button class="admin" onclick="handleLogin('founder')">Founder Login</button>
+    </div>
 
-<script>
-function go(type){
-    if(type==="customer"){
-        window.location.href="customer-login.html";
-    }
-    if(type==="agent"){
-        window.location.href="../agent/agent-login.html";
-    }
-    if(type==="admin"){
-        window.location.href="../admin/dashboard.html";
-    }
-}
-</script>
+    <script src="js/config.js"></script>
+
+    <script>
+        // This function simulates the verification success block you provided
+        async function handleLogin(roleType) {
+            // This is where your fetch/API call happens. 
+            // Below is the specific verify success block you requested:
+            
+            /* Assuming 'res' and 'data' come from your API response 
+               after the user enters credentials.
+            */
+            
+            // Example of your requested logic:
+            if(res.ok && data.access_token){
+                localStorage.clear();
+                localStorage.setItem("access_token", data.access_token);
+                localStorage.setItem("role", data.role);
+
+                if(data.role === "customer"){
+                    window.location.href = "/customer/dashboard.html";
+                } else if(data.role === "agent"){
+                    window.location.href = "/agent/dashboard.html";
+                } else if(data.role === "founder"){
+                    window.location.href = "/founder/control-tower.html";
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>
