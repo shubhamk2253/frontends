@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+
     <title>Agent Comprehensive Dashboard</title>
     <style>
         body {
@@ -104,64 +107,66 @@
     </table>
 </div>
 
-
-<script src="config.js"></script>
 <script>
-    const token = localStorage.getItem("token");
+    // 1. Mandatory Role Check (must be first)
+    requireRole("agent");
 
-/* ---------- WORKLOAD (CURRENT AGENT) ---------- */
-fetch(`${API_BASE}/api/agent/workload`, {
-    headers: { "Authorization": "Bearer " + token }
-})
-.then(res => res.json())
-.then(data => {
-    const tbody = document.querySelector("#workloadTable tbody");
+    // Using the consistent token key from your login script
+    const token = localStorage.getItem("access_token");
 
-    tbody.innerHTML = `
-        <tr>
-            <td>Current Agent</td>
-            <td>-</td>
-            <td>-</td>
-            <td><strong>${data.pending_tasks}</strong></td>
-        </tr>
-    `;
-})
-.catch(err => console.error("Workload Error:", err));
+    /* ---------- WORKLOAD (CURRENT AGENT) ---------- */
+    fetch(`${API_BASE}/api/agent/workload`, {
+        headers: { "Authorization": "Bearer " + token }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.querySelector("#workloadTable tbody");
 
-
-/* ---------- EARNINGS SUMMARY ---------- */
-fetch(`${API_BASE}/api/agent/earnings/summary`, {
-    headers: { "Authorization": "Bearer " + token }
-})
-.then(res => res.json())
-.then(data => {
-    document.getElementById("totalEarnings").innerText =
-        "₹" + (data.total_earnings || 0);
-})
-.catch(err => console.error("Summary Error:", err));
+        tbody.innerHTML = `
+            <tr>
+                <td>Current Agent</td>
+                <td>-</td>
+                <td>-</td>
+                <td><strong>${data.pending_tasks || 0}</strong></td>
+            </tr>
+        `;
+    })
+    .catch(err => console.error("Workload Error:", err));
 
 
-/* ---------- EARNINGS HISTORY ---------- */
-fetch(`${API_BASE}/api/agent/earnings/history`, {
-    headers: { "Authorization": "Bearer " + token }
-})
-.then(res => res.json())
-.then(rows => {
-    const table = document.querySelector("#earningsTable tbody");
+    /* ---------- EARNINGS SUMMARY ---------- */
+    fetch(`${API_BASE}/api/agent/earnings/summary`, {
+        headers: { "Authorization": "Bearer " + token }
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("totalEarnings").innerText =
+            "₹" + (data.total_earnings || 0);
+    })
+    .catch(err => console.error("Summary Error:", err));
 
-    rows.forEach(r => {
-        table.innerHTML += `
-        <tr>
-            <td>${r.application_id}</td>
-            <td style="color:green;font-weight:bold;">₹${r.earned}</td>
-            <td>${r.service}</td>
-            <td>${new Date(r.created_at).toLocaleDateString()}</td>
-        </tr>`;
-    });
-})
-.catch(err => console.error("History Error:", err));
+
+    /* ---------- EARNINGS HISTORY ---------- */
+    fetch(`${API_BASE}/api/agent/earnings/history`, {
+        headers: { "Authorization": "Bearer " + token }
+    })
+    .then(res => res.json())
+    .then(rows => {
+        const table = document.querySelector("#earningsTable tbody");
+        table.innerHTML = ""; // Clear existing
+
+        rows.forEach(r => {
+            table.innerHTML += `
+            <tr>
+                <td>${r.application_id}</td>
+                <td style="color:green;font-weight:bold;">₹${r.earned}</td>
+                <td>${r.service}</td>
+                <td>${new Date(r.created_at).toLocaleDateString()}</td>
+            </tr>`;
+        });
+    })
+    .catch(err => console.error("History Error:", err));
 </script>
-
 
 </body>
 </html>
