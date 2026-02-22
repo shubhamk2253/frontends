@@ -1,58 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>KaagazSeva — Secure Payment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout — KaagazSeva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary: #0a4fa3;
+            --primary-dark: #083d7e;
+            --success: #10b981;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --bg: #f1f5f9;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f4f7fc;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            color: var(--text-main);
         }
 
-        .payment-card {
+        .payment-container {
             background: white;
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
             text-align: center;
-            max-width: 400px;
-            width: 100%;
+            max-width: 440px;
+            width: 90%;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .logo { color: #0a4fa3; font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-        .amount-display { font-size: 48px; font-weight: bold; color: #333; margin: 20px 0; }
-        .details { color: #666; margin-bottom: 30px; font-size: 14px; }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            background: var(--primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .summary-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .amount-display {
+            font-size: 44px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .app-id-tag {
+            font-size: 12px;
+            color: var(--text-light);
+            background: #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
 
         .btn-pay {
-            background: #0a4fa3;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 18px 30px;
             width: 100%;
-            border-radius: 10px;
+            border-radius: 14px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(10, 79, 163, 0.2);
         }
 
-        .btn-pay:hover { background: #083d7e; }
-        .btn-pay:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-pay:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(10, 79, 163, 0.3);
+        }
+
+        .btn-pay:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .secure-footer {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0.7;
+        }
+
+        .secure-item {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .secure-item i { color: var(--success); }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 
 <body>
 
-    <div class="payment-card">
-        <div class="logo">KaagazSeva</div>
-        <p>Service Application Payment</p>
-        <div class="amount-display" id="displayAmount">₹0</div>
-        <p class="details">Secure Payment Gateway via Razorpay</p>
-        <button class="btn-pay" id="payButton" onclick="startPayment()">Pay Securely Now</button>
+    <div class="payment-container">
+        <div class="header-brand">
+            <div class="logo-icon"><i class="fas fa-file-invoice"></i></div>
+            <div class="brand-name">KaagazSeva</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="summary-label">Amount Due</div>
+            <div class="amount-display" id="displayAmount">₹0</div>
+            <div class="app-id-tag" id="displayAppId">ID: Loading...</div>
+        </div>
+
+        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 30px;">
+            Service: <b>Document Processing Fee</b><br>
+            Please do not refresh or close this window.
+        </p>
+
+        <button class="btn-pay" id="payButton" onclick="startPayment()">
+            <div class="spinner" id="btnSpinner"></div>
+            <span id="btnText"><i class="fas fa-lock" style="margin-right:8px"></i>Pay Securely Now</span>
+        </button>
+
+        <div class="secure-footer">
+            <div class="secure-item"><i class="fas fa-shield-check"></i> SSL Secure</div>
+            <div class="secure-item"><i class="fas fa-check-circle"></i> Razorpay Verified</div>
+            <div class="secure-item"><i class="fas fa-lock"></i> PCI-DSS</div>
+        </div>
     </div>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -62,14 +204,20 @@
         const application_id = params.get('app_id');
         const amount = params.get('amount');
 
+        // Initial UI Polish
         document.getElementById('displayAmount').innerText = "₹" + amount;
+        document.getElementById('displayAppId').innerText = "APP ID: " + (application_id || 'N/A');
 
         function startPayment() {
             const btn = document.getElementById('payButton');
+            const spinner = document.getElementById('btnSpinner');
+            const btnText = document.getElementById('btnText');
+            
+            // Loading State
             btn.disabled = true;
-            btn.innerText = "Initializing...";
+            spinner.style.display = "block";
+            btnText.innerText = "Initializing Terminal...";
 
-            // FIX 2: Corrected API URL
             fetch(`${API_BASE}/api/payment/create-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -80,36 +228,35 @@
             })
             .then(res => res.json())
             .then(order => {
-                var options = {
-                    "key": order.key, // FIX 3: Dynamic Razorpay Key
+                const options = {
+                    "key": order.key, 
                     "amount": order.amount,
                     "currency": "INR",
-                    "name": "KaagazSeva",
-                    "description": "Document Service Fee",
-                    "order_id": order.order_id, // FIX 1: Property name changed to order_id
+                    "name": "KaagazSeva India",
+                    "description": `Payment for App ID: ${application_id}`,
+                    "order_id": order.order_id, 
                     "handler": function (response) {
                         verifyPayment(response, order.amount);
                     },
                     "modal": {
                         "ondismiss": function() {
-                            btn.disabled = false;
-                            btn.innerText = "Pay Securely Now";
+                            resetButton();
                         }
                     },
                     "theme": { "color": "#0a4fa3" }
                 };
-                var rzp1 = new Razorpay(options);
+                const rzp1 = new Razorpay(options);
                 rzp1.open();
             })
             .catch(err => {
-                alert("Error: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "Pay Securely Now";
+                alert("Payment Engine Error: " + err.message);
+                resetButton();
             });
         }
 
         function verifyPayment(response, paidAmount) {
-            // FIX 2: Corrected API URL
+            document.getElementById('btnText').innerText = "Verifying Transaction...";
+            
             fetch(`${API_BASE}/api/payment/verify`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -124,14 +271,26 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "confirmation.html?app_id=" + application_id;
+                    window.location.href = "confirmation.html?app_id=" + application_id + "&status=success";
                 } else {
-                    alert("Verification failed. Contact Support.");
+                    alert("Handshake Failed. If amount was debited, it will be refunded in 5-7 days.");
+                    resetButton();
                 }
             })
             .catch(err => {
-                alert("Verification Error: " + err.message);
+                alert("Verification System Error. Please contact support with App ID.");
+                resetButton();
             });
+        }
+
+        function resetButton() {
+            const btn = document.getElementById('payButton');
+            const spinner = document.getElementById('btnSpinner');
+            const btnText = document.getElementById('btnText');
+            
+            btn.disabled = false;
+            spinner.style.display = "none";
+            btnText.innerHTML = '<i class="fas fa-lock" style="margin-right:8px"></i>Pay Securely Now';
         }
     </script>
 </body>
