@@ -1,69 +1,195 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Revenue Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-body{font-family:Segoe UI;background:#f5f7fb;padding:40px;}
-.container{max-width:1100px;margin:auto;background:white;padding:30px;border-radius:18px;}
-h2{color:#0a4fa3;margin-bottom:20px;}
-</style>
+    <meta charset="UTF-8">
+    <title>Revenue Intelligence – KaagazSeva</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0a4fa3;
+            --accent: #10b981;
+            --bg: #f0f4f8;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+        }
+
+        body { 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 30px; 
+            color: var(--text-dark);
+        }
+
+        .dashboard-wrapper {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h2 { font-weight: 800; letter-spacing: -1px; color: var(--primary); margin: 0; }
+
+        /* KPI Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .kpi-card:hover { transform: translateY(-5px); }
+
+        .kpi-label { font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .kpi-value { font-size: 32px; font-weight: 800; margin: 10px 0; color: var(--text-dark); }
+        .kpi-trend { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+        /* Charts Section */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 30px;
+        }
+
+        .chart-box {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .chart-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .charts-container { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 
 <body>
-<div class="container">
-<h2>Revenue Dashboard</h2>
 
-<p>Today Revenue: ₹<span id="today"></span></p>
-<p>Monthly Revenue: ₹<span id="monthly"></span></p>
+<div class="dashboard-wrapper">
+    <div class="header-flex">
+        <h2><i class="fas fa-chart-line-up"></i> Revenue Intelligence</h2>
+        <div style="font-size: 14px; color: #64748b;">Live Updates • 2026 Fiscal Year</div>
+    </div>
 
-<canvas id="serviceChart"></canvas>
-<br><br>
-<canvas id="districtChart"></canvas>
+    <div class="stats-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Today's Earnings</div>
+            <div class="kpi-value">₹<span id="today">0</span></div>
+            <div class="kpi-trend"><i class="fas fa-arrow-trend-up"></i> +12% from yesterday</div>
+        </div>
+        <div class="kpi-card" style="border-left-color: var(--accent);">
+            <div class="kpi-label">Monthly Revenue</div>
+            <div class="kpi-value">₹<span id="monthly">0</span></div>
+            <div class="kpi-trend"><i class="fas fa-calendar-check"></i> Current Billing Cycle</div>
+        </div>
+    </div>
+
+    
+    <div class="charts-container">
+        <div class="chart-box">
+            <div class="chart-title"><i class="fas fa-layer-group"></i> Performance by Service</div>
+            <canvas id="serviceChart" height="150"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <div class="chart-title"><i class="fas fa-map-location-dot"></i> Regional Distribution</div>
+            <canvas id="districtChart"></canvas>
+        </div>
+    </div>
 </div>
 
 <script src="config.js"></script>
 <script>
-
-function authFetch(url, options = {}) {
+/**
+ * Advanced authFetch Utility
+ * Integrates global API_BASE and Token Handling
+ */
+function authFetch(endpoint, options = {}) {
     const token = localStorage.getItem("token");
-
     options.headers = {
         ...(options.headers || {}),
         "Authorization": "Bearer " + token,
         "Content-Type": "application/json"
     };
-
-    return fetch(API_BASE + url, options)
-        .then(res => res.json());
+    return fetch(`${API_BASE}${endpoint}`, options).then(res => res.json());
 }
 
-fetch(`${API_BASE}/api/admin/revenue-stats`)
-.then(res=>res.json())
-.then(d=>{
+// Fetch and Render Logic
+authFetch('/api/admin/revenue-stats')
+.then(response => {
+    const d = response.data;
 
-document.getElementById("today").innerText = d.data.today;
-document.getElementById("monthly").innerText = d.data.monthly;
+    // Numerical Updates
+    document.getElementById("today").innerText = d.today.toLocaleString('en-IN');
+    document.getElementById("monthly").innerText = d.monthly.toLocaleString('en-IN');
 
-/* Service chart */
-const services = d.data.service.map(x=>x.service);
-const sRevenue = d.data.service.map(x=>x.revenue);
+    // Chart.js Professional Styling
+    const chartColors = ['#0a4fa3', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
 
-new Chart(document.getElementById("serviceChart"),{
-type:"bar",
-data:{labels:services,datasets:[{label:"Revenue by Service",data:sRevenue}]}
-});
+    /* 1. Bar Chart: Service Revenue */
+    new Chart(document.getElementById("serviceChart"), {
+        type: "bar",
+        data: {
+            labels: d.service.map(x => x.service),
+            datasets: [{
+                label: "Revenue (₹)",
+                data: d.service.map(x => x.revenue),
+                backgroundColor: 'rgba(10, 79, 163, 0.8)',
+                borderRadius: 8,
+                hoverBackgroundColor: '#0a4fa3'
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } } }
+        }
+    });
 
-/* District chart */
-const districts = d.data.district.map(x=>x.district);
-const dRevenue = d.data.district.map(x=>x.revenue);
-
-new Chart(document.getElementById("districtChart"),{
-type:"pie",
-data:{labels:districts,datasets:[{data:dRevenue}]}
-});
-
-});
+    /* 2. Pie Chart: District Distribution */
+    new Chart(document.getElementById("districtChart"), {
+        type: "doughnut", // Changed to doughnut for a more modern look
+        data: {
+            labels: d.district.map(x => x.district),
+            datasets: [{
+                data: d.district.map(x => x.revenue),
+                backgroundColor: chartColors,
+                borderWidth: 0,
+                cutout: '70%'
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+            }
+        }
+    });
+})
+.catch(err => console.error("Dashboard Load Error:", err));
 
 </script>
 </body>
