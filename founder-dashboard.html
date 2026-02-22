@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Founder Control Tower | Premium Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../config.js"></script>
+    
+    <style>
+        :root {
+            --bg: #0a0b10;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Grid Layout --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* --- Beast Cards --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        .card-label {
+            color: var(--text-dim);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 12px 0 4px 0;
+        }
+
+        /* --- Sections --- */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .data-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .list-item:last-child { border-bottom: none; }
+
+        .badge {
+            background: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #stateChartContainer {
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-shield-halved"></i> FOUNDER CONTROL TOWER</h1>
+        <button onclick="logout()" style="background: none; border: 1px solid var(--danger); color: var(--danger); padding: 8px 16px; border-radius: 8px; cursor: pointer;">Logout</button>
+    </div>
+
+    <div class="grid" id="metrics">
+        </div>
+
+    <div class="section-grid">
+        <div class="card">
+            <h3><i class="fas fa-chart-line"></i> State Distribution</h3>
+            <div id="stateChartContainer">
+                <canvas id="stateChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-trophy"></i> Elite Agents</h3>
+            <div id="agentsList" class="data-list">
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// --- Protection Logic ---
+const token = localStorage.getItem("token");
+if(!token) window.location.href = "../login.html";
+
+async function loadDashboard() {
+    try {
+        const res = await fetch(API_BASE + "/api/admin/dashboard", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+            localStorage.clear();
+            window.location.href = "../login.html";
+        }
+
+        const data = await res.json();
+        
+        // Render Metrics
+        document.getElementById("metrics").innerHTML = `
+            <div class="card">
+                <div class="card-label"><i class="fas fa-indian-rupee-sign"></i> Total Revenue</div>
+                <div class="card-value">₹${data.summary.total_revenue.toLocaleString()}</div>
+                <div style="color:var(--success)">+12% vs last month</div>
+            </div>
+            <div class="card">
+                <div class="card-label"><i class="fas fa-vault"></i> Net Profit</div>
+                <div class="card-value" style="color: var(--accent)">₹${data.summary.net_revenue.toLocaleString()}</div>
+            </div>
+            <div class="card">
+                <div class="card-label"><i class="fas fa-wallet"></i> Pending Payouts</div>
+                <div class="card-value" style="color: var(--danger)">₹${data.summary.pending_payouts.toLocaleString()}</div>
+            </div>
+            <div class="card">
+                <div class="card-label"><i class="fas fa-undo"></i> Refund Ratio</div>
+                <div class="card-value">${data.summary.refund_ratio_percent}%</div>
+            </div>
+        `;
+
+        // Render Elite Agents
+        document.getElementById("agentsList").innerHTML = data.top_agents.map(a => `
+            <div class="list-item">
+                <span>${a.name}</span>
+                <span class="badge">${a.completed} Orders</span>
+            </div>
+        `).join("");
+
+        // Render Chart
+        renderChart(data.state_performance);
+
+    } catch (err) {
+        console.error("Dashboard Load Error:", err);
+    }
+}
+
+function renderChart(stateData) {
+    const ctx = document.getElementById('stateChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: stateData.map(s => s.state_id),
+            datasets: [{
+                label: 'Applications',
+                data: stateData.map(s => s.count),
+                backgroundColor: '#6366f1',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+            }
+        }
+    });
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "../login.html";
+}
+
+loadDashboard();
+</script>
+</body>
+</html>
