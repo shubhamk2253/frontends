@@ -8,63 +8,63 @@
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --gov-blue: #003366; /* Deep Institutional Blue */
-            --gov-blue-light: #0055a4;
-            --ash: #f2f4f7;
-            --text-dark: #1a1a1a;
-            --text-muted: #535353;
-            --gold: #b38f00; /* Subtle Gold for Authority */
-            --white: #ffffff;
-            --border-color: #d1d5db;
-            --drawer-width: 380px;
+            --primary-navy: #002347; /* Elite Institutional Blue */
+            --royal-gold: #c5a059; /* Premium Champagne Gold */
+            --off-white: #fcfcf9;
+            --premium-gray: #4a5568;
+            --border-subtle: #e2e8f0;
+            --drawer-width: 400px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         
         body { 
-            background: var(--white); 
-            color: var(--text-dark); 
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
+            background: var(--off-white); 
+            color: var(--primary-navy); 
+            line-height: 1.6;
         }
 
-        /* --- Institutional Header --- */
+        /* --- Premium Header --- */
         header {
             background: var(--white);
-            padding: 0 6%;
-            height: 80px;
+            padding: 0 7%;
+            height: 100px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 3px solid var(--gov-blue);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid var(--border-subtle);
         }
 
         .logo {
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 15px;
         }
 
         .logo-symbol {
-            background: var(--gov-blue);
-            color: white;
-            width: 45px;
-            height: 45px;
+            border: 2px solid var(--primary-navy);
+            color: var(--primary-navy);
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
-            font-size: 22px;
+            font-size: 24px;
+            position: relative;
+        }
+        .logo-symbol::after {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            border: 1px solid var(--royal-gold); top: 3px; left: 3px; z-index: -1;
         }
 
         .logo-text {
@@ -73,170 +73,179 @@
         }
 
         .logo-text .brand {
-            font-family: 'Merriweather', serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gov-blue);
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            letter-spacing: 1px;
+            color: var(--primary-navy);
             line-height: 1;
         }
 
         .logo-text .tagline {
-            font-size: 10px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .nav-right { display: flex; align-items: center; gap: 30px; }
-
-        .nav-links { display: flex; gap: 25px; }
-        .nav-links a {
-            color: var(--gov-blue);
-            text-decoration: none;
+            letter-spacing: 1.5px;
+            color: var(--royal-gold);
             font-weight: 600;
-            font-size: 14px;
-            transition: 0.2s;
+            margin-top: 5px;
         }
-        .nav-links a:hover { text-decoration: underline; }
 
-        /* --- Secure Access Button --- */
+        .nav-right { display: flex; align-items: center; gap: 35px; }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            color: var(--primary-navy);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .nav-links a:hover { color: var(--royal-gold); }
+
+        /* --- Executive Access Button --- */
         .founder-access-btn {
-            background: var(--ash);
-            color: var(--gov-blue);
-            border: 1px solid var(--border-color);
-            padding: 8px 15px;
-            border-radius: 4px;
+            background: transparent;
+            color: var(--primary-navy);
+            border: 1px solid var(--primary-navy);
+            padding: 8px 16px;
             font-weight: 700;
             font-size: 11px;
             text-transform: uppercase;
             cursor: pointer;
             display: none;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            transition: 0.3s;
         }
-
-        .pulse-dot {
-            width: 8px; height: 8px; background: #c00;
-            border-radius: 50%;
-        }
+        .founder-access-btn:hover { background: var(--primary-navy); color: white; }
 
         .menu-btn {
-            background: var(--gov-blue);
+            background: var(--primary-navy);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 28px;
             font-weight: 600;
             font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: 0.2s;
+            gap: 12px;
+            transition: 0.3s;
         }
-        .menu-btn:hover { background: var(--gov-blue-light); }
+        .menu-btn:hover { background: #00366d; box-shadow: 0 5px 15px rgba(0,35,71,0.2); }
 
-        /* --- Side Drawer --- */
+        /* --- Executive Side Drawer --- */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            visibility: hidden; opacity: 0; transition: 0.3s; z-index: 2000;
+            background: rgba(0, 35, 71, 0.4);
+            visibility: hidden; opacity: 0; transition: 0.4s; z-index: 2000;
         }
         .drawer {
             position: fixed; top: 0; right: calc(-1 * var(--drawer-width)); 
             width: var(--drawer-width); height: 100%;
             background: var(--white); z-index: 2001;
-            transition: 0.3s ease-out;
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             display: flex; flex-direction: column;
-            border-left: 1px solid var(--border-color);
+            border-left: 5px solid var(--royal-gold);
+            background: #fff;
         }
         .drawer.active { right: 0; }
         .drawer-overlay.active { visibility: visible; opacity: 1; }
 
-        .drawer-content { flex: 1; overflow-y: auto; padding: 30px; }
+        .drawer-content { flex: 1; overflow-y: auto; padding: 50px 40px; }
 
         .user-profile-card {
-            background: var(--ash);
-            padding: 20px; border-radius: 4px;
-            margin-bottom: 25px; border-left: 4px solid var(--gov-blue);
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 30px;
+            margin-bottom: 30px;
         }
 
         .drawer-section h4 {
-            font-size: 12px; text-transform: uppercase; 
-            color: var(--gov-blue); margin: 20px 0 10px; font-weight: 700;
-            border-bottom: 1px solid var(--border-color); padding-bottom: 5px;
+            font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--royal-gold); margin: 30px 0 15px; font-weight: 700;
         }
 
         .drawer-link {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px 0; color: var(--text-dark);
-            text-decoration: none; font-weight: 500; font-size: 15px;
+            display: flex; align-items: center; gap: 15px;
+            padding: 12px 0; color: var(--primary-navy);
+            text-decoration: none; font-weight: 500; font-size: 16px;
             transition: 0.2s;
         }
-        .drawer-link i { width: 20px; color: var(--gov-blue); text-align: center; }
-        .drawer-link:hover { color: var(--gov-blue-light); padding-left: 5px; }
+        .drawer-link i { font-size: 18px; color: var(--royal-gold); width: 25px; }
+        .drawer-link:hover { color: var(--royal-gold); transform: translateX(10px); }
 
-        .logout-btn { color: #b91c1c !important; border-top: 1px solid #eee; margin-top: 15px; }
+        .logout-btn { color: #8a1a1a !important; margin-top: 20px; font-weight: 700; }
 
         /* --- Hero Section --- */
         .hero {
-            background: #f8f9fa;
-            border-bottom: 1px solid var(--border-color);
-            padding: 100px 6%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: linear-gradient(rgba(0,35,71,0.92), rgba(0,35,71,0.92)), url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            color: var(--white);
+            padding: 140px 7% 100px;
             text-align: center;
+            border-bottom: 8px solid var(--royal-gold);
         }
         .hero h1 { 
-            font-family: 'Merriweather', serif;
-            font-size: 42px; 
-            color: var(--gov-blue);
-            margin-bottom: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 52px; 
+            margin-bottom: 25px;
+            line-height: 1.2;
         }
         .hero p { 
-            font-size: 18px; color: var(--text-muted); max-width: 800px; 
-            margin-bottom: 35px; 
+            font-size: 20px; color: #cbd5e0; max-width: 850px; 
+            margin: 0 auto 45px; font-weight: 300; 
         }
 
         .cta-btn {
-            background: var(--gov-blue);
-            color: white;
-            padding: 15px 40px;
-            border: none; border-radius: 4px;
-            font-size: 16px; font-weight: 700;
-            cursor: pointer; 
-            text-transform: uppercase;
+            background: var(--royal-gold);
+            color: #fff;
+            padding: 18px 50px;
+            border: none;
+            font-size: 15px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; transition: 0.3s;
         }
-        .cta-btn:hover { background: var(--gov-blue-light); }
+        .cta-btn:hover { background: #b08b47; transform: translateY(-2px); }
 
-        /* --- Services Section --- */
-        .section { padding: 80px 6%; max-width: 1200px; margin: 0 auto; }
-        .section-header { text-align: left; margin-bottom: 40px; border-left: 5px solid var(--gold); padding-left: 20px; }
-        .section-header h2 { font-family: 'Merriweather', serif; font-size: 28px; color: var(--gov-blue); }
+        /* --- Premium Service Grid --- */
+        .section { padding: 100px 7%; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 70px; }
+        .section-header h2 { font-family: 'Cinzel', serif; font-size: 36px; position: relative; display: inline-block; padding-bottom: 15px; }
+        .section-header h2::after {
+            content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 2px; background: var(--royal-gold);
+        }
 
         .grid-services {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
         }
         .service-card {
-            background: var(--white);
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            transition: 0.2s;
+            background: white;
+            padding: 50px 40px;
+            border: 1px solid var(--border-subtle);
+            transition: 0.4s;
+            text-align: center;
         }
-        .service-card:hover { border-color: var(--gov-blue); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .icon-wrap {
-            font-size: 32px; color: var(--gold); margin-bottom: 20px;
+        .service-card:hover { 
+            border-color: var(--royal-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
-        .service-card h3 { margin-bottom: 10px; color: var(--gov-blue); font-size: 18px; }
+        .icon-gold {
+            font-size: 40px; color: var(--royal-gold); margin-bottom: 25px;
+        }
+        .service-card h3 { 
+            font-family: 'Cinzel', serif; 
+            font-size: 20px; margin-bottom: 15px; 
+            color: var(--primary-navy);
+        }
+        .service-card p { font-size: 15px; color: var(--premium-gray); }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero h1 { font-size: 30px; }
+            .hero h1 { font-size: 32px; }
             .drawer { width: 100%; right: -100%; }
         }
     </style>
@@ -249,25 +258,24 @@
         <div class="logo-symbol"><i class="fas fa-landmark"></i></div>
         <div class="logo-text">
             <span class="brand">KaagazSeva</span>
-            <span class="tagline">Government Document Facilitation</span>
+            <span class="tagline">Bridging the Gap to Digital India</span>
         </div>
     </a>
 
     <div class="nav-right">
         <button id="founderBtn" class="founder-access-btn" onclick="location.href='founder/login.html'">
-            <div class="pulse-dot"></div>
-            Internal System
+            Executive Terminal
         </button>
 
         <nav class="nav-links">
-            <a href="apply-service.html">Services</a>
-            <a href="track.html">Status</a>
-            <a href="support.html">Help Desk</a>
+            <a href="apply-service.html">Solutions</a>
+            <a href="track.html">Tracking</a>
+            <a href="support.html">Assistance</a>
         </nav>
 
         <button class="menu-btn" onclick="toggleDrawer()">
-            <i class="fas fa-bars"></i>
-            <span>Portal Menu</span>
+            <i class="fas fa-shield-alt"></i>
+            <span>Portal Access</span>
         </button>
     </div>
 </header>
@@ -275,48 +283,48 @@
 <div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
 <div class="drawer" id="drawer">
     <div class="drawer-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="font-size: 18px; color: var(--gov-blue);">Account & Services</h2>
-            <button onclick="toggleDrawer()" style="background:none; border:none; font-size: 20px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+            <h2 style="font-family: 'Cinzel', serif; font-size: 20px;">Identity & Access</h2>
+            <button onclick="toggleDrawer()" style="background:none; border:none; font-size: 24px; cursor:pointer; color: var(--royal-gold);"><i class="fas fa-times"></i></button>
         </div>
 
         <div id="auth-ui">
             <div id="guest-view">
                 <div class="user-profile-card">
-                    <p style="font-weight:700;">Welcome, Visitor</p>
-                    <p style="font-size:13px; color:var(--text-muted);">Log in to access your dashboard.</p>
+                    <p style="font-size: 13px; color: var(--royal-gold); font-weight: 700; letter-spacing: 1px;">WELCOME</p>
+                    <p style="font-size: 22px; font-weight: 300;">Authorized Guest</p>
                 </div>
                 
                 <div class="drawer-section">
-                    <h4>Login Portals</h4>
-                    <a href="customer/login.html" class="drawer-link"><i class="fas fa-user"></i> Citizen Login</a>
-                    <a href="agent/login.html" class="drawer-link"><i class="fas fa-user-tie"></i> Authorized Agent</a>
-                    <a href="admin/login.html" class="drawer-link"><i class="fas fa-shield-alt"></i> Departmental Login</a>
+                    <h4>Secure Gateway</h4>
+                    <a href="customer/login.html" class="drawer-link"><i class="fas fa-id-card-alt"></i> Citizen Portal</a>
+                    <a href="agent/login.html" class="drawer-link"><i class="fas fa-user-tie"></i> Agent Channel</a>
+                    <a href="admin/login.html" class="drawer-link"><i class="fas fa-fingerprint"></i> Staff Verification</a>
                 </div>
 
                 <div class="drawer-section">
-                    <h4>Registrations</h4>
-                    <a href="customer/register.html" class="drawer-link"><i class="fas fa-user-plus"></i> Citizen Enrollment</a>
-                    <a href="agent/register.html" class="drawer-link"><i class="fas fa-handshake"></i> Agent Partnership</a>
+                    <h4>Enrollment</h4>
+                    <a href="customer/register.html" class="drawer-link"><i class="fas fa-plus-square"></i> New Registration</a>
+                    <a href="agent/register.html" class="drawer-link"><i class="fas fa-handshake"></i> Agency Partnership</a>
                 </div>
             </div>
 
             <div id="logged-in-view" style="display:none;">
                 <div class="user-profile-card">
-                    <p id="user-name" style="font-weight:700; font-size: 18px; color:var(--gov-blue);"></p>
-                    <p id="user-role-badge" style="font-size:11px; color:var(--gold); font-weight:700; text-transform:uppercase;"></p>
+                    <p id="user-role-badge" style="font-size:11px; color:var(--royal-gold); font-weight:700; letter-spacing: 2px; text-transform:uppercase;"></p>
+                    <p id="user-name" style="font-size: 24px; font-weight: 300; color:var(--primary-navy);"></p>
                 </div>
 
                 <div class="drawer-section">
-                    <h4>Workplace</h4>
+                    <h4>Operations</h4>
                     <div id="dashboard-links"></div>
                 </div>
                 
                 <div class="drawer-section">
-                    <h4>Tools</h4>
-                    <a href="track.html" class="drawer-link"><i class="fas fa-search"></i> Application Tracking</a>
-                    <a href="support.html" class="drawer-link"><i class="fas fa-headset"></i> Support Tickets</a>
-                    <a href="#" class="drawer-link logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Secure Logout</a>
+                    <h4>Governance</h4>
+                    <a href="track.html" class="drawer-link"><i class="fas fa-crosshairs"></i> Application Status</a>
+                    <a href="support.html" class="drawer-link"><i class="fas fa-info-circle"></i> Support Desk</a>
+                    <a href="#" class="drawer-link logout-btn" onclick="logout()"><i class="fas fa-power-off"></i> Terminate Session</a>
                 </div>
             </div>
         </div>
@@ -324,30 +332,30 @@
 </div>
 
 <section class="hero">
-    <h1>Your Trusted Gateway to Digital Documents</h1>
-    <p>Empowering Indian citizens with professional assistance for PAN cards, Revenue certificates, and Passport services through a verified national network.</p>
-    <button class="cta-btn" onclick="location.href='apply-service.html'">Begin Application</button>
+    <h1>Premier Facilitation for National Documentation</h1>
+    <p>Ensuring every Indian citizen has seamless access to vital government records through a network of verified, elite document specialists.</p>
+    <button class="cta-btn" onclick="location.href='apply-service.html'">Initiate Service</button>
 </section>
 
 <section class="section">
     <div class="section-header">
-        <h2>Our Official Services</h2>
+        <h2>Institutional Services</h2>
     </div>
     <div class="grid-services">
         <div class="service-card">
-            <div class="icon-wrap"><i class="fas fa-id-card"></i></div>
-            <h3>PAN Card Services</h3>
-            <p style="color:var(--text-muted); font-size:14px;">Authorized processing for fresh PAN applications, updates to existing records, and duplicate card re-issuance.</p>
+            <div class="icon-gold"><i class="fas fa-id-badge"></i></div>
+            <h3>PAN Registry</h3>
+            <p>Direct processing of Income Tax Department PAN applications, corrections, and digital reprints.</p>
         </div>
         <div class="service-card">
-            <div class="icon-wrap"><i class="fas fa-file-invoice"></i></div>
-            <h3>Revenue Certificates</h3>
-            <p style="color:var(--text-muted); font-size:14px;">Securely apply for Domicile, Income, and Caste certificates through local administrative channels.</p>
+            <div class="icon-gold"><i class="fas fa-stamp"></i></div>
+            <h3>Revenue & Estate</h3>
+            <p>Professional procurement of Domicile, Caste, and Income certification through state revenue departments.</p>
         </div>
         <div class="service-card">
-            <div class="icon-wrap"><i class="fas fa-passport"></i></div>
-            <h3>Passport Assistance</h3>
-            <p style="color:var(--text-muted); font-size:14px;">Professional guidance for appointment scheduling and verification of documents required for travel.</p>
+            <div class="icon-gold"><i class="fas fa-passport"></i></div>
+            <h3>Passport Seva</h3>
+            <p>End-to-end appointment logistics and documentation audit for international travel credentials.</p>
         </div>
     </div>
 </section>
@@ -372,31 +380,31 @@
             document.getElementById('guest-view').style.display = 'none';
             document.getElementById('logged-in-view').style.display = 'block';
             document.getElementById('user-name').innerText = name;
-            document.getElementById('user-role-badge').innerText = role;
+            document.getElementById('user-role-badge').innerText = role + " Session";
 
             const dashContainer = document.getElementById('dashboard-links');
             let links = '';
 
             if(role === 'founder') {
                 links = `
-                    <a href="founder/control-tower.html" class="drawer-link"><i class="fas fa-server"></i> Control Tower</a>
-                    <a href="founder/admin-management.html" class="drawer-link"><i class="fas fa-user-shield"></i> Admin Management</a>
-                    <a href="founder/revenue.html" class="drawer-link"><i class="fas fa-indian-rupee-sign"></i> Revenue Overview</a>
+                    <a href="founder/control-tower.html" class="drawer-link"><i class="fas fa-microchip"></i> Executive Tower</a>
+                    <a href="founder/admin-management.html" class="drawer-link"><i class="fas fa-users-cog"></i> Administrative Control</a>
+                    <a href="founder/revenue.html" class="drawer-link"><i class="fas fa-coins"></i> Revenue Analytics</a>
                 `;
             } else if(role === 'admin') {
                 links = `
-                    <a href="admin/dashboard.html" class="drawer-link"><i class="fas fa-table-columns"></i> Admin Console</a>
-                    <a href="admin/approvals.html" class="drawer-link"><i class="fas fa-check-circle"></i> Verification Queue</a>
+                    <a href="admin/dashboard.html" class="drawer-link"><i class="fas fa-chart-pie"></i> Departmental Console</a>
+                    <a href="admin/approvals.html" class="drawer-link"><i class="fas fa-clipboard-check"></i> Verification Queue</a>
                 `;
             } else if(role === 'agent') {
                 links = `
-                    <a href="agent/dashboard.html" class="drawer-link"><i class="fas fa-laptop-code"></i> Service Terminal</a>
-                    <a href="agent/wallet.html" class="drawer-link"><i class="fas fa-wallet"></i> Agent Wallet</a>
+                    <a href="agent/dashboard.html" class="drawer-link"><i class="fas fa-laptop"></i> Agent Terminal</a>
+                    <a href="agent/wallet.html" class="drawer-link"><i class="fas fa-wallet"></i> Digital Wallet</a>
                 `;
             } else {
                 links = `
-                    <a href="customer/dashboard.html" class="drawer-link"><i class="fas fa-folder"></i> My Documents</a>
-                    <a href="customer/profile.html" class="drawer-link"><i class="fas fa-id-badge"></i> Profile Details</a>
+                    <a href="customer/dashboard.html" class="drawer-link"><i class="fas fa-archive"></i> Application Archive</a>
+                    <a href="customer/profile.html" class="drawer-link"><i class="fas fa-user-circle"></i> Security Profile</a>
                 `;
             }
             dashContainer.innerHTML = links;
@@ -404,7 +412,7 @@
     }
 
     function logout() {
-        if(confirm("Confirm secure logout? Your session will be terminated.")) {
+        if(confirm("Are you sure you want to terminate this secure session?")) {
             localStorage.clear();
             window.location.href = "index.html";
         }
